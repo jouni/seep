@@ -1,1 +1,1 @@
-return {name:"App-two"};
+exports.name="App-two";
