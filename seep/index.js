@@ -23,15 +23,18 @@ exports.add = function(app, uri) {
 
 
 var handleRequest = function(req, res) {
-	//for(var o in req.uri)
-	//	sys.puts(o+":"+req.uri[o]); 
 	for(uri in apps) {
 		if(uri == req.uri.path) {
 			res.sendHeader(200, {"Content-Type": "text/plain"});
   			res.sendBody(apps[uri].name+ "("+uri+")");
   			res.finish();
+  			return;
   		}
 	}
+	// Default response (404)
+	res.sendHeader(404, {"Content-Type": "text/html"});
+  	res.sendBody("<h1>404</h1><p>Not found</p>");
+  	res.finish();
 }
 
 
