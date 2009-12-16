@@ -1,6 +1,7 @@
 //var server = require("./server");
 var sys = require("sys");
 var http = require("http");
+var posix = require("posix");
 
 
 // Map from URI to app
@@ -17,21 +18,31 @@ exports.add = function(app, uri) {
 	}
 	sys.puts("Adding app "+app.name);
 	apps[uri] = app;
+	return app;
 }
 
 
 var handleRequest = function(req, res) {
-	// 
+	//for(var o in req.uri)
+	//	sys.puts(o+":"+req.uri[o]); 
+	for(uri in apps) {
+		if(uri == req.uri.path) {
+			res.sendHeader(200, {"Content-Type": "text/plain"});
+  			res.sendBody(apps[uri].name+ "("+uri+")");
+  			res.finish();
+  		}
+	}
 }
 
 
 
-exports.start = function(host, port) {
+exports.start = function(port) {
 	for(var app in apps) {
 		//sys.puts("Starting app "+apps[app].name);
 		
 	}
 	http.createServer(handleRequest).listen(port);
+	sys.puts("Seep server running at port "+port);
 }
 
 
