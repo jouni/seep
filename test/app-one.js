@@ -1,2 +1,1 @@
-require("sys");
-exports.name = "App-one";
+exports.name="App-one";
