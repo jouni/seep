@@ -3,30 +3,32 @@ var sys = require("sys");
 var http = require("http");
 var posix = require("posix");
 
-
-// Map from URI to app
-var apps = {};
+var apps = [];
 
 
 /**
  * Add new Seep application
  */
 exports.add = function(app, uri) {
-	if(typeof apps[uri] != "undefined") {
-		sys.puts("Application already specified for URI "+uri);
-		return;
-	}
-	sys.puts("Adding app "+app.name);
-	apps[uri] = app;
+	//if(typeof apps[uri] != "undefined") {
+	//	sys.puts("Application already specified for URI " + uri);
+	//	return;
+	//}
+	for(var o in app)
+		sys.puts(o+":"+app[o]);
+	//sys.puts("Adding app " + app.getName());
+	//app.setPath(uri);
+	apps.push(app);
 	return app;
 }
 
 
 var handleRequest = function(req, res) {
-	for(uri in apps) {
-		if(uri == req.uri.path) {
+	for(var i=0; i < apps.length; i++) {
+		var app = apps[i];
+		if(app.getPath() == req.uri.path) {
 			res.sendHeader(200, {"Content-Type": "text/plain"});
-  			res.sendBody(apps[uri].name+ "("+uri+")");
+  			res.sendBody(app.getName() + "("+uri+")");
   			res.finish();
   			return;
   		}
@@ -40,12 +42,8 @@ var handleRequest = function(req, res) {
 
 
 exports.start = function(port) {
-	for(var app in apps) {
-		//sys.puts("Starting app "+apps[app].name);
-		
-	}
 	http.createServer(handleRequest).listen(port);
-	sys.puts("Seep server running at port "+port);
+	sys.puts("Seep server running @ 127.0.0.1:"+port);
 }
 
 

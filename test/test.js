@@ -13,8 +13,8 @@ seep.start(PORT);
 
 
 // Apps can be added after start, too
-var two = seep.add(require("./app-two"), "/two");
+//var two = seep.add(require("./app-two"), "/two");
 
 
 // Multiple apps in same uri should fail
-//var two = seep.add("./app-one", "/two");
+//var two = seep.add(require("./app-two"), "/two");
