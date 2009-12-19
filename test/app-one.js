@@ -1,5 +1,9 @@
-var Application = require("../seep/application");
+var seep = require("../seep");
+var sys = require("sys");
 
-var myApp = new Application("Application One");
+var app = new seep.Application("My application");
+var w = new seep.ui.Window("my window");
+app.setMainWindow(w);
 
-exports.app = myApp;
+
+exports.foobar = app;

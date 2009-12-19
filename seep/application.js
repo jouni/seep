@@ -1,28 +1,42 @@
 var c = require("./external/class");
 var sys = require("sys");
 
-var Application = c.Class.extend({
+exports.Application = c.Class.extend({
 
-  path: undefined,
+	init: function(name){
+		if(typeof name == 'undefined')
+			this.name = "unnamed-seep-application";
+		else
+			this.name = name;
+	},
 
-  init: function(name){
-  	this.name = name;
-  },
-  
-  getName: function(){
-    return this.name;
-  },
-  
-  getPath: function(){
-    return this.path;
-  },
-  
-  setPath: function(path){
-    this.path = path;
-  }
-  
+	getSeepName: function(){
+		return this.name;
+	},
+
+	getPath: function(){
+		return this.path;
+	},
+
+	setPath: function(path){
+		this.path = path;
+	},
+	
+	setMainWindow: function(main) {
+		this.mainWindow = main;
+	},
+	
+	getMainWindow: function() {
+		return this.mainWindow;
+	},
+
+	serialize: function() {
+  		if(typeof this.mainWindow != 'undefined') {
+  			return this.mainWindow.serialize();
+  		} else {
+  			sys.puts("ERROR: No main window specified.");
+  			mainWindow(); // generate exception
+  		}
+	}
+
 });
-
-process.mixin(true, exports, Application);
-
-sys.puts(typeof exports);
