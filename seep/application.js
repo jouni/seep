@@ -30,9 +30,9 @@ exports.Application = c.Class.extend({
 		return this.mainWindow;
 	},
 
-	serialize: function() {
+	toString: function() {
   		if(typeof this.mainWindow != 'undefined') {
-  			return this.mainWindow.serialize();
+  			return JSON.stringify(this.mainWindow.serialize());
   		} else {
   			sys.puts("ERROR: No main window specified.");
   			mainWindow(); // generate exception

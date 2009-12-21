@@ -1,6 +1,9 @@
 var c = require("../external/class");
-
+var Flow = require("./layout/flow").Flow;
+var sys = require("sys");
 exports.Window = c.Class.extend({
+
+	layout: new Flow(),
 
 	init: function(title){
 		this.title = title;
@@ -11,7 +14,14 @@ exports.Window = c.Class.extend({
 	},
 
 	serialize: function() {
-		return "main window serialize: "+this.title;
+		return {
+			t: this.title,
+			l: this.layout.serialize()
+		};
+	},
+	
+	add: function(c) {
+		this.layout.add(c);
 	}
     
 });

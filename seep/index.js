@@ -12,13 +12,13 @@ var apps = [];
 exports.add = function(blueprint, uri) {
 	var app = null;
 	
-	if(typeof blueprint == 'object' && typeof blueprint.getSeepName == 'function') {
-		app = blueprint;
+	if(typeof blueprint == 'function' && typeof blueprint.prototype.getSeepName == 'function') {
+		app = new blueprint;
 	} else {
 		for(var o in blueprint) {
 			var candidate = blueprint[o];
-			if(typeof candidate == 'object' && typeof candidate.getSeepName == 'function') {
-				app = candidate;
+			if(typeof candidate == 'function' && typeof candidate.prototype.getSeepName == 'function') {
+				app = new candidate;
 				break;
 			}
 		}
@@ -53,7 +53,7 @@ var handleRequest = function(req, res) {
 		if(app.getPath() == req.uri.path) {
 			try {
 				var body = html_template;
-				body = body.replace("@WINDOW_TITLE@", app.getMainWindow().getTitle()).replace("@WINDOW_CONTENT@", app.serialize());
+				body = body.replace("@WINDOW_TITLE@", app.getMainWindow().getTitle()).replace("@WINDOW_CONTENT@", app.toString());
 				respond(res, body, "text/html");
   			} catch(e) {
 				default_show_500(req, res, e);
@@ -109,6 +109,7 @@ exports.Application = require("./application").Application;
 
 exports.ui = {};
 exports.ui.Window = require("./ui/window").Window;
+exports.ui.Text = require("./ui/text").Text;
 
 
 
