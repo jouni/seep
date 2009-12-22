@@ -9,14 +9,8 @@ var Flow = Class.extend({
 	},
 	
 	serialize: function() {
-		var ret = "[";
-		for(i=0; i < this.children.length; i++) {
-			ret += this.children[i].serialize();
-			if(i>0)
-				ret += ",";
-		}
-		ret += "]";
-		return ret;
+		// Proper serialization is done no application level (JSON.stringify)
+		return this.children;
 	}
 
 });

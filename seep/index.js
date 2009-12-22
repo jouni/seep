@@ -6,6 +6,9 @@ var posix = require("posix");
 var apps = [];
 
 
+var docRoot = __filename.substr(0, __filename.lastIndexOf("/")+1);
+
+
 /**
  * Initiate and add a new Seep application
  */
@@ -47,13 +50,24 @@ exports.add = function(blueprint, uri) {
 }
 
 
+
+// Path to client side scripts
+var clientPackage = "/seep_client";
+var server = require("./server");
+
 var handleRequest = function(req, res) {
+	if(req.uri.path.indexOf(clientPackage) >= 0) {
+		// Serving static JS files
+		var filename = docRoot+"client/"+req.uri.path.substr(req.uri.path.indexOf(clientPackage)+clientPackage.length);
+		server.serveFile(req, res, filename);
+		return;
+	}
 	for(var i=0; i < apps.length; i++) {
 		var app = apps[i];
 		if(app.getPath() == req.uri.path) {
 			try {
 				var body = html_template;
-				body = body.replace("@WINDOW_TITLE@", app.getMainWindow().getTitle()).replace("@WINDOW_CONTENT@", app.toString());
+				body = body.replace("@WINDOW_TITLE@", app.getMainWindow().getTitle()).replace("@APP_INIT@", app.serialize()).replace(/@CLIENT_PACKAGE@/g, clientPackage);
 				respond(res, body, "text/html");
   			} catch(e) {
 				default_show_500(req, res, e);
@@ -124,7 +138,7 @@ exports.ui.Text = require("./ui/text").Text;
 
 
 var html_template = "";
-var filename = __filename.substr(0, __filename.lastIndexOf("/")+1) + "static/html_template.html";
+var filename = docRoot + "static/html_template.html";
 var encoding = 'text';
 sys.puts("loading " + filename + "...");
 var promise = posix.cat(filename, encoding);

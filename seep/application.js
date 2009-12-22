@@ -30,7 +30,7 @@ exports.Application = c.Class.extend({
 		return this.mainWindow;
 	},
 
-	toString: function() {
+	serialize: function() {
   		if(typeof this.mainWindow != 'undefined') {
   			return JSON.stringify(this.mainWindow.serialize());
   		} else {
