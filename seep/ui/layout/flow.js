@@ -9,8 +9,14 @@ var Flow = Class.extend({
 	},
 	
 	serialize: function() {
-		// Proper serialization is done no application level (JSON.stringify)
-		return this.children;
+		var children = [];
+		for(var i=0; i < this.children.length;i++) {
+			children.push(this.children[i].serialize());
+		}
+		return {
+			type: "layout.flow",
+			c: children
+		};
 	}
 
 });

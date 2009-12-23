@@ -9,6 +9,9 @@ var app = seep.Application.extend({
 		this.setMainWindow(this.w);
 		this.w.add(new seep.ui.Text("Hello"));
 		this.w.add(new seep.ui.Text("World!"));
+		this.w.addListener("onload", function() {
+				alert("add");
+			}.runInClient(), "onloader");
 	}
 
 });

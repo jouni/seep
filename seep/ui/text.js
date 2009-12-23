@@ -1,6 +1,6 @@
 var c = require("../external/class");
 
-var Text = Class.extend({
+exports.Text = Class.extend({
 
 	text: null,
 	
@@ -9,9 +9,10 @@ var Text = Class.extend({
 	},
 	
 	serialize: function() {
-		return this.text;
+		return {
+			type: "text",
+			text: this.text
+		};
 	}
 
 });
-
-exports.Text = Text;
