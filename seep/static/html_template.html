@@ -10,28 +10,12 @@
 	<script type="text/javascript" src="@CLIENT_PACKAGE@/external/LAB.js"></script>
 	<script type="text/javascript">
 		$LAB
-		.script("@CLIENT_PACKAGE@/external/json_parse.js").wait(function() {
-			var seep = {};
-			
-			seep.init = function(json) {
-				var ui = json_parse(json);
-				console.log(ui);
-				for(var i=0; i < ui.length; i++) {
-					var widget = ui[i];
-					for(var j=0; j < widget.listeners.length; j++) {
-						var l = widget.listeners[j];
-						console.log(l.l);
-						eval(l.l);
-					}
-				}
-			}
-			
-			seep.init(window.seepinit);
-		});
+		.script("@CLIENT_PACKAGE@/external/json_parse.js")
+		.wait()
+		.script("@CLIENT_PACKAGE@/seep.js");
 	</script>
 	
 </head>
 <body>
-
 </body>
 </html>

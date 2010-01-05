@@ -1,22 +1,37 @@
-var c = require("../../external/class");
+var Widget = require("../widget").Widget;
 
-var Flow = Class.extend({
+var Flow = Widget.extend({
 
-	children: [],
+	type: "seep.ui.layout.flow",
 	
-	add: function(child) {
-		this.children.push(child);
+	init: function() {
+		this._super();
+		this.widgets = new Array();
 	},
 	
-	serialize: function() {
-		var children = [];
-		for(var i=0; i < this.children.length;i++) {
-			children.push(this.children[i].serialize());
+	add: function(widget) {
+		this.widgets.push(widget);
+		widget.setParent(this);
+		if(this.application) {
+			widget.setApplication(this.application);
 		}
-		return {
-			type: "layout.flow",
-			c: children
-		};
+	},
+	
+	setApplication: function(app) {
+		this._super(app);
+		for(var i=0; i < this.widgets.length;i++) {
+			this.widgets[i].setApplication(app);
+		}
+	},
+	
+	serialize: function(out) {
+		this._super(out);
+		var c = [];
+		for(var i=0; i < this.widgets.length;i++) {
+			c.push(this.widgets[i].serialize({}));
+		}
+		out.widgets = c;
+		return out;
 	}
 
 });

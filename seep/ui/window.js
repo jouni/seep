@@ -1,11 +1,15 @@
-var w = require("./widget");
+var Widget = require("./widget").Widget;
 var layout = require("./layout");
+var sys = require("sys");
 
-exports.Window = w.Widget.extend({
+exports.Window = Widget.extend({
+
+	type: "seep.ui.window",
 
 	layout: new layout.Flow(),
 
 	init: function(title){
+		this._super();
 		this.title = title;
 	},
 	
@@ -13,12 +17,11 @@ exports.Window = w.Widget.extend({
 		return this.title;
 	},
 
-	serialize: function() {
-		var super = this._super();
-		super.type = "window";
-		super.title = this.title;
-		super.l = this.layout.serialize();
-		return super;
+	serialize: function(out) {
+		this._super(out);
+		out.title = this.title;
+		out.l = this.layout.serialize({});
+		return out;
 	},
 	
 	add: function(c) {
