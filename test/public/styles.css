@@ -1,0 +1,26 @@
+body {
+	font-family: sans-serif;
+	color: #333;
+	font-size: 14px;
+	line-height: 19px;
+	background: #eee;
+	}
+
+.test {
+	border: 1px solid #ccc;
+	background: #fff;
+	padding: 10px;
+	margin: 10px;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0,.3);
+	box-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	float: left;
+	}
+
+#hello-world,
+#change-text-with-button {
+	height: 20px;
+	}

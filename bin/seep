@@ -1,0 +1,13 @@
+#!/bin/bash
+seep_dir=$(dirname $0)
+run_dir=$1
+
+if [ "$1" = "" ]; then
+	run_dir=$(pwd)
+else
+	if [ ${run_dir:0:1} != "/" ]; then
+	    run_dir=$(pwd)/${run_dir}
+	fi
+fi
+
+node ${seep_dir}/../lib/start.js $run_dir $2

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Seep UI test</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+	
+
+	<div id="hello-world" class="test"></div>
+	<div id="change-text-with-button" class="test"></div>
+	
+	
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+  		<script type="text/javascript">!window.jQuery && document.write("<script src=\"/jquery-1.4.2.min.js\"><\/script>");</script>
+  		<script src="/LAB.js" type="text/javascript"></script>
+		<script src="/socket.io/socket.io.js" type=text/javascript></script>
+		<script src="/seep.js" type="text/javascript"></script>
+		
+		<script type="text/javascript">
+			/* Arguments:
+			 *  - app path (the js filename for the application that is deployed on the server)
+			 *  - element id which will serve as the root of the application. Leave blank to occupy the body.
+		 	 */
+		 	seep.init("hello-world", "hello-world")
+		 	seep.init("change-text-with-button", "change-text-with-button")
+		 	
+		</script>
+	
+	</body>
+</html>

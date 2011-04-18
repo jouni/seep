@@ -1,0 +1,7 @@
+{
+  "name" : "seep"
+, "description" : "High level widget & application framework for Node.js"
+, "author" : "Jouni Koivuviita"
+, "version" : "0.0.1"
+, "main" : "index"
+}
