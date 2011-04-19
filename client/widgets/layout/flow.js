@@ -43,7 +43,9 @@ seep.layout.flow.prototype.update = function(json) {
 					el.appendChild(widget.element)
 				} 
 				this.element.appendChild(el);
+				widget.updateSize()
 			}
 		}
+		this.updateSize()
 	}
 }

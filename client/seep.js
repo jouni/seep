@@ -32,6 +32,8 @@ var seep = (function(){
 	// Public interface
 	return {
 		init: function(appPath, appId) {
+			if(typeof appId === "boolean")
+				appId = appPath
 	    	setTimeout(function() {
 			    new seep.application(appPath, appId);
 			}, 0);
@@ -123,8 +125,10 @@ seep.application = function(appPath, elementId) {
 		console.log("Application (id:" + self.id + ") closed")
 	})
 	this.conn.on('disconnect', function() {
-		console.log("Application (id:" + self.id + ") disconnected. Trying to reconnect...")
-		this.connect()
+		console.log("Application (id:" + self.id + ") disconnected")
+		// TODO server down? connection breaking?
+		// TODO need to clear the application from the DOM, make a full refresh
+		//this.connect()
 	})
 	
 	// Start the application
@@ -160,10 +164,11 @@ seep.application = function(appPath, elementId) {
 	        var json = widgets[i];
 	        var widget = this.getWidget(json);
 	        if(widget) {
+	            widget.update(json);
 	            if(widget.element.parentNode == null) {
 	            	this.getElement().appendChild(widget.element)
+	            	widget.updateSize()
 	            }
-	            widget.update(json);
 	        } else {
 	        	console.log("No widget found for JSON", json)
 	        }
@@ -265,8 +270,19 @@ seep.widget = function(json) {
 		for(var i=0; i < json.sync.length; i++) {
 			var self = this
 			this.watch(json.sync[i], function(prop, old, val) {
-				if(prop=="visible")
+				if(prop=="visible") {
 					self.element.style.display = val ? "" : "none"
+				} else if(prop=="width") {
+					self.element.style.width = val
+					self.sync(true)
+					self.sync("pixelWidth", "", self.element.offsetWidth)
+					self.sync(false)
+				} else if(prop=="height") {
+					self.element.style.height = val
+					self.sync(true)
+					self.sync("pixelHeight", "", self.element.offsetHeight)
+					self.sync(false)
+				}
 				self.sync(prop, old, val)
 				return val
 			})
@@ -283,19 +299,24 @@ seep.widget.prototype.sync = function() {
 		var val = arguments[2]
 		var self = this
 		if(typeof old != "undefined" && old != val && this.synching)
-			setTimeout(function() {
-				self.application.sync(self.id, prop, val)
-			}, 0)
+			self.application.sync(self.id, prop, val)
 	}
 }
 
 seep.widget.prototype.update = function(json) {	
 	this.sync(false)
 	
-	if(typeof json.visible != "undefined") {
+	if(typeof json.visible != "undefined")
 		this.visible = json.visible
-		this.element.style.display = json.visible ? "" : "none"
-	}
+	
+	if(json.tooltip)
+		this.element.title = json.tooltip
+	
+	if(json.width)
+		this.width = json.width
+	
+	if(json.height)
+		this.height = json.height
 
     if(json.styles) {
     	for(var i=0; i < json.styles.length; i++) {
@@ -312,11 +333,11 @@ seep.widget.prototype.update = function(json) {
     	if(json.listeners.server) {
     		for(var type in json.listeners.server) {
     			if(json.listeners.server[type] < 0)
-    				$(this.element).unbind(type)
+    			    $(this.element).unbind(type+".server")
     			else
-    				$(this.element).bind(type, function(event) {
-    					var w = seep.getWidget(this)
-    					w.application.sendEvent(w.id, type, event);
+    			    $(this.element).bind(type+".server", function(event) {
+    			    	var w = seep.getWidget(this)
+    			    	w.application.sendEvent(w.id, type, event);
     				});
     		}
     	}
@@ -340,6 +361,13 @@ seep.widget.prototype.update = function(json) {
     }
     
     this.sync(true)
+}
+
+seep.widget.prototype.updateSize = function() {
+	this.pixelWidth = this.element.offsetWidth
+	this.pixelHeight = this.element.offsetHeight
+	this.sync("pixelWidth", "", this.pixelWidth)
+	this.sync("pixelHeight", "", this.pixelHeight)
 }
 
 seep.widget.prototype.watch = function (prop, handler) {

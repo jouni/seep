@@ -9,6 +9,7 @@ seep.field = function(json) {
 		if(self.type == "checkbox")
 			self.checkbox.disabled = val
 		self.element.disabled = val
+		$(self.element).toggleClass("s-disabled", val)
 		self.sync(prop, old, val)
 		return val
 	})

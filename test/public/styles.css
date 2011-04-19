@@ -1,5 +1,5 @@
 body {
-	font-family: sans-serif;
+	font-family: "Droid Sans", sans-serif;
 	color: #333;
 	font-size: 14px;
 	line-height: 19px;
@@ -11,16 +11,95 @@ body {
 	background: #fff;
 	padding: 10px;
 	margin: 10px;
-	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.3);
-	-moz-box-shadow: 0 1px 1px rgba(0,0,0,.3);
-	box-shadow: 0 1px 1px rgba(0,0,0,.3);
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+	-webkit-border-radius: 1px;
+	-moz-border-radius: 1px;
+	border-radius: 1px;
 	float: left;
 	}
 
-#hello-world,
-#change-text-with-button {
-	height: 20px;
+.test > legend {
+	font-size: 12px;
+	font-weight: bold;
+	}
+
+
+.s-button,
+.s-button.s-disabled:active {
+	-webkit-appearance: none;
+	font-family: "Droid Sans", sans-serif;
+	font-size: 13px;
+	line-height: 1;
+	font-weight: bold;
+	color: #23476B;
+	text-shadow: 0 1px 1px rgba(255,255,255,.7);
+	padding: 4px 16px;
+	border-radius: 4px;
+	margin: 0;
+	
+	background: #deefff; /* old browsers */
+background: -moz-linear-gradient(top, #deefff 0%, #98bede 100%); /* firefox */
+
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede)); /* webkit */
+
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 ); /* ie */
+
+background: -o-linear-gradient(top, #deefff 0%,#98bede 100%); /* opera */
+	
+	border: 1px solid #729CBF;
+	border-top-color: #9ABAD3;
+	cursor: pointer;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 2px rgba(255,255,255,1);
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0,.2), inset 0 2px 0 rgba(255,255,255,.7), inset 0 0 2px rgba(255,255,255,1);
+	box-shadow: 0 1px 1px rgba(0,0,0,.2), inset 0 2px 0 rgba(255,255,255,.7), inset 0 0 2px rgba(255,255,255,1);
+	}
+
+.s-button:active {
+
+	background: #9CC4E2; /* old browsers */
+background: -moz-linear-gradient(top, #9CC4E2 0%, #B3CEE5 99%); /* firefox */
+
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9CC4E2), color-stop(99%,#B3CEE5)); /* webkit */
+
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9CC4E2', endColorstr='#B3CEE5',GradientType=0 ); /* ie */
+
+background: -o-linear-gradient(top, #9CC4E2 0%,#B3CEE5 99%); /* opera */
+
+	border-color: #6E8FB7;
+	color: #1F3A5E;
+	text-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.s-button:focus {
+	outline: none;
+	-webkit-box-shadow: 0 0 3px #207DC9;
+	-moz-box-shadow: 0 0 3px #207DC9;
+	box-shadow: 0 0 3px #207DC9;
+	}
+
+.s-button::-moz-focus-inner {
+	border: 0;
+	}
+
+.s-button.s-disabled,
+.s-button.s-disabled:active {
+	opacity: .5;
+	cursor: default;
+	}
+
+
+
+.s-input {
+	font-family: "Droid Sans", sans-serif;
+	font-size: 14px;
+	border: 1px solid #ddd;
+	border-top-color: #aaa;
+	color: #333;
+	padding: 3px;
+	}
+
+.s-input.s-disabled {
+	color: #aaa;
 	}

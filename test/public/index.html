@@ -8,8 +8,11 @@
 	<body>
 	
 
-	<div id="hello-world" class="test"></div>
-	<div id="change-text-with-button" class="test"></div>
+	<fieldset class="test"><legend>Hello World</legend><div id="hello-world"></div></fieldset>
+	<fieldset class="test"><legend>Visibility</legend><div id="visibility"></div></fieldset>
+	<fieldset class="test"><legend>Disabled</legend><div id="disabled"></div></fieldset>
+	<fieldset class="test"><legend>Server vs. Client Event Handling</legend><div id="change-text-with-button"></div></fieldset>
+	<fieldset class="test"><legend>Add & Remove</legend><div id="add-remove-widgets"></div></fieldset>
 	
 	
 	
@@ -22,10 +25,13 @@
 		<script type="text/javascript">
 			/* Arguments:
 			 *  - app path (the js filename for the application that is deployed on the server)
-			 *  - element id which will serve as the root of the application. Leave blank to occupy the body.
+			 *  - element id which will serve as the root of the application. Leave blank to occupy the body. Use 'true' to occupy an element with the same id as the path for the application
 		 	 */
-		 	seep.init("hello-world", "hello-world")
-		 	seep.init("change-text-with-button", "change-text-with-button")
+		 	seep.init("hello-world", true)
+		 	seep.init("visibility", true)
+		 	seep.init("disabled", true)
+		 	seep.init("change-text-with-button", true)
+		 	seep.init("add-remove-widgets", true)
 		 	
 		</script>
 	

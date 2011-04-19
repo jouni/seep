@@ -3,18 +3,20 @@ var seep = require("seep")
 exports.app = seep.Application.extend({
 
 	init: function() {
-		this._super("Change text with button")
+		this._super("Toggle visibility")
 		
 		var layout = new seep.layout.Flow({wrap: "div"})
 		this.add(layout)
 		
-		this.change_me = new seep.Text("Click the button to show current time")
+		this.change_me = new seep.Text("Peek-a-Boo!")
+		this.change_me.visible = false
 		layout.add(this.change_me)
 		
-		this.button = new seep.Button("Server date")
+		this.button = new seep.Button("Show")
 		
 		var handler = function(e) {
-			this.change_me.text = new Date()
+			this.change_me.visible = !this.change_me.visible
+			this.button.text = this.change_me.visible ? "Hide" : "Show"
 		}
 		
 		this.button.addListener("click", handler, {bind: this, id: "handler"})
@@ -23,10 +25,8 @@ exports.app = seep.Application.extend({
 		this.toggle.addListener("change", function(e) {
 			this.button.removeListener("handler")
 			if(e.source.checked) {
-				this.button.text = "Browser date"
 				this.button.addListener("click", handler, {bind: this, id: "handler", client: true})
 			} else {
-				this.button.text = "Server date"
 				this.button.addListener("click", handler, {bind: this, id: "handler"})
 			}
 		}, {bind: this})

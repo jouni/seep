@@ -18,14 +18,21 @@ seep.checkbox = function(json) {
 	var self = this
 	this.watch("checked", function(prop, old, val) {
 		self.checkbox.checked = val
+		$(self.element).toggleClass("s-checked", val)
 		self.sync(prop, old, val)
 		return val
 	})
 	
-	$(this.checkbox).change(function(e) {
-		console.log(this.checked)
-		self.application.sync(self.id, "checked", this.checked)
+	$(this.checkbox).change(function() {
+		self.sync("checked", !this.checked, this.checked)
+		self.sync(false)
+		self.checked = this.checked
+		self.sync(true)
 	})
+	
+	$(this.element).bind("mousedown", function(event) {
+    	event.preventDefault()
+    })
 }
 
 seep.checkbox.inherit(seep.field)
