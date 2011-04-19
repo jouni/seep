@@ -3,13 +3,18 @@ seep.input = function(json) {
 		return
 	
 	if(!json.elementType)
-		json.elementType = "input"
+		json.elementType = json.multiline? "textarea" : "input"
 	
 	seep.field.call(this, json)
-	this.element.type = "text"
+	
+	if(!json.multiline)
+		this.element.type = "text"
 	
 	var self = this
 	$(this.element).change(function(e) {
+		self.sync(false)
+		self.text = this.value
+		self.sync(true)
 		self.application.sync(self.id, "text", this.value)
 	})
 }

@@ -275,11 +275,13 @@ seep.widget = function(json) {
 				} else if(prop=="width") {
 					self.element.style.width = val
 					self.sync(true)
+					self.pixelWidth = self.element.offsetWidth
 					self.sync("pixelWidth", "", self.element.offsetWidth)
 					self.sync(false)
 				} else if(prop=="height") {
 					self.element.style.height = val
 					self.sync(true)
+					self.pixelHeight = self.element.offsetHeight
 					self.sync("pixelHeight", "", self.element.offsetHeight)
 					self.sync(false)
 				}

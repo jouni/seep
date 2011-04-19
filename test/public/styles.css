@@ -23,6 +23,11 @@ body {
 	}
 
 
+.s-text {
+	display: inline-block;
+	zoom: 1;
+	}
+
 .s-button,
 .s-button.s-disabled:active {
 	-webkit-appearance: none;
