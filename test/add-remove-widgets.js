@@ -5,12 +5,12 @@ exports.app = seep.Application.extend({
 	init: function() {
 		this._super("Add & remove widgets from a layout")
 		
-		this.layout = new seep.layout.Flow()
+		this.layout = new seep.layout.Flow({wrap: "div.row"})
 		this.add(this.layout)
 		
 		var add = new seep.Button("Add");
 		add.addListener("click", function() {
-			this.layout.add(new seep.Text("Widget #" + this.layout.count()+1))
+			this.layout.add(new seep.Text("Widget #" + (this.layout.count()+1)))
 			this.remove.disabled = false
 		}, {bind: this})
 		this.layout.add(add)

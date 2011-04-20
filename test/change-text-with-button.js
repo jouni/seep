@@ -5,7 +5,7 @@ exports.app = seep.Application.extend({
 	init: function() {
 		this._super("Change text with button")
 		
-		var layout = new seep.layout.Flow({wrap: "div"})
+		var layout = new seep.layout.Flow({wrap: "div.row"})
 		this.add(layout)
 		
 		this.change_me = new seep.Text("Click the button to show current time")

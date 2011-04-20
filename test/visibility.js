@@ -5,7 +5,7 @@ exports.app = seep.Application.extend({
 	init: function() {
 		this._super("Toggle visibility")
 		
-		var layout = new seep.layout.Flow({wrap: "div"})
+		var layout = new seep.layout.Flow({wrap: "div.row"})
 		this.add(layout)
 		
 		this.change_me = new seep.Text("Peek-a-Boo!")

@@ -167,7 +167,7 @@ seep.application = function(appPath, elementId) {
 	            widget.update(json);
 	            if(widget.element.parentNode == null) {
 	            	this.getElement().appendChild(widget.element)
-	            	widget.updateSize()
+	            	widget.attached()
 	            }
 	        } else {
 	        	console.log("No widget found for JSON", json)
@@ -273,17 +273,21 @@ seep.widget = function(json) {
 				if(prop=="visible") {
 					self.element.style.display = val ? "" : "none"
 				} else if(prop=="width") {
-					self.element.style.width = val
-					self.sync(true)
-					self.pixelWidth = self.element.offsetWidth
-					self.sync("pixelWidth", "", self.element.offsetWidth)
-					self.sync(false)
+					if(old != val) {
+						self.element.style.width = val
+						self.sync(true)
+						self.pixelWidth = self.element.offsetWidth
+						self.sync("pixelWidth", "", self.element.offsetWidth)
+						self.sync(false)
+					}
 				} else if(prop=="height") {
-					self.element.style.height = val
-					self.sync(true)
-					self.pixelHeight = self.element.offsetHeight
-					self.sync("pixelHeight", "", self.element.offsetHeight)
-					self.sync(false)
+					if(old != val) {
+						self.element.style.height = val
+						self.sync(true)
+						self.pixelHeight = self.element.offsetHeight
+						self.sync("pixelHeight", "", self.element.offsetHeight)
+						self.sync(false)
+					}
 				}
 				self.sync(prop, old, val)
 				return val
@@ -363,13 +367,23 @@ seep.widget.prototype.update = function(json) {
     }
     
     this.sync(true)
+    
+    if(this.parent)
+    	this.updateSize()
 }
 
 seep.widget.prototype.updateSize = function() {
+	var oldW = this.pixelWidth || 0
+	var oldH = this.pixelHeight || 0
 	this.pixelWidth = this.element.offsetWidth
 	this.pixelHeight = this.element.offsetHeight
-	this.sync("pixelWidth", "", this.pixelWidth)
-	this.sync("pixelHeight", "", this.pixelHeight)
+	this.sync("pixelWidth", oldW, this.pixelWidth)
+	this.sync("pixelHeight", oldH, this.pixelHeight)
+}
+
+seep.widget.prototype.attached = function() {
+	this.updateSize()
+	$(this.element).trigger("attach")
 }
 
 seep.widget.prototype.watch = function (prop, handler) {

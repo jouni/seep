@@ -7,6 +7,8 @@ seep.layout.flow = function(json) {
 		
 	seep.widget.call(this, json)
     this.wrap = json.wrap
+    
+    this.lazyAttach = []
 }
 
 seep.layout.flow.inherit(seep.widget)
@@ -43,9 +45,19 @@ seep.layout.flow.prototype.update = function(json) {
 					el.appendChild(widget.element)
 				} 
 				this.element.appendChild(el);
-				widget.updateSize()
+				if(this.parent)
+	            	widget.attached()
+	            else
+	            	this.lazyAttach.push(widget)
 			}
 		}
-		this.updateSize()
 	}
+}
+
+seep.layout.flow.prototype.attached = function() {
+	seep.widget.prototype.attached.call(this)
+	for(var i=0; i < this.lazyAttach.length; i++) {
+		this.lazyAttach[i].attached()
+	}
+	this.lazyAttach = []
 }

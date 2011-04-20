@@ -5,7 +5,7 @@ exports.app = seep.Application.extend({
 	init: function() {
 		this._super("Set size")
 		
-		var layout = new seep.layout.Flow({wrap: "div"})
+		var layout = new seep.layout.Flow({wrap: "div.row"})
 		this.add(layout)
 		
 		this.change_me = new seep.Input("", {multiline: true})
@@ -34,8 +34,21 @@ exports.app = seep.Application.extend({
 		var handler = function(e) {
 			this.change_me.width = this.width.text
 			this.change_me.height = this.height.text
-			this.change_me.text = this.change_me.pixelWidth + " x " + this.change_me.pixelHeight
+			this.change_me.text = this.change_me.pixelWidth + "px x " + this.change_me.pixelHeight + "px"
 		}
+		
+		this.change_me.addListener("attach", function() {
+			this.width.text = this.change_me.pixelWidth + "px"
+			this.height.text = this.change_me.pixelHeight + "px"
+			this.change_me.text = this.change_me.pixelWidth + "px x " + this.change_me.pixelHeight + "px"
+		}, {bind: this})
+		
+		var enterHandler = function(event) {
+			if(event.keyCode==13)
+				this.button.click()
+		}
+		this.height.addListener("keypress", enterHandler, {bind: this, client: true})
+		this.width.addListener("keypress", enterHandler, {bind: this, client: true})
 		
 		this.button.addListener("click", handler, {bind: this, id: "handler"})
 		
