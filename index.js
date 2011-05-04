@@ -9,6 +9,7 @@ exports.Text = require("./lib/widgets/text").Text
 exports.Input = require("./lib/widgets/input").Input
 exports.Button = require("./lib/widgets/button").Button
 exports.Checkbox = require("./lib/widgets/checkbox").Checkbox
+exports.Overlay = require("./lib/widgets/overlay").Overlay
 exports.layout = require("./lib/widgets/layout") // All layout widgets
 
 

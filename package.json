@@ -2,6 +2,12 @@
   "name" : "seep"
 , "description" : "High level widget & application framework for Node.js"
 , "author" : "Jouni Koivuviita"
-, "version" : "0.0.1"
+, "homepage" : "http://seepjs.org"
+, "version" : "0.0.1a"
 , "main" : "index"
+, "dependencies" : {
+		  "connect" : "1.2.x"
+		, "socket.io" : "0.6.x"
+		, "socket.io-connect" : "0.2.x"
+	}
 }

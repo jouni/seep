@@ -12,10 +12,15 @@ seep.input = function(json) {
 	
 	var self = this
 	$(this.element).change(function(e) {
-		self.sync(false)
+		//self.sync(false)
 		self.text = this.value
-		self.sync(true)
-		self.application.sync(self.id, "text", this.value)
+		//self.sync(true)
+		//self.application.sync(self.id, "text", this.value)
+	})
+	
+	$(this.element).keydown(function(e) {
+		if(self.text != this.value)
+			self.text = this.value
 	})
 }
 

@@ -36,11 +36,16 @@ var seep = (function(){
 				appId = appPath
 	    	setTimeout(function() {
 			    new seep.application(appPath, appId);
-			}, 0);
+			}, 10);
 		},
 		
 		getApplication: function(id) {
 			return applications[id]
+		},
+		
+		// Shorthand version for seep.getApplication(id).getWidgetById(id)
+		get: function(appId, widgetId) {
+			return seep.getApplication(appId).getWidgetById(widgetId)
 		},
 		
 		addApplication: function(app) {
@@ -100,7 +105,9 @@ seep.application = function(appPath, elementId) {
 	this.rootElement.className += (this.rootElement.className.length>0? " " : "") + "seep-app"
 	this.path = appPath
 	
-	var self = this;
+	var self = this
+	
+	this.messageQueue = []
 
 	this.conn = new io.Socket()
 	
@@ -166,7 +173,10 @@ seep.application = function(appPath, elementId) {
 	        if(widget) {
 	            widget.update(json);
 	            if(widget.element.parentNode == null) {
-	            	this.getElement().appendChild(widget.element)
+	            	if(widget.type == "overlay")
+	            		document.body.appendChild(widget.element)
+	            	else
+	            		this.getElement().appendChild(widget.element)
 	            	widget.attached()
 	            }
 	        } else {
@@ -188,7 +198,7 @@ seep.application = function(appPath, elementId) {
 	    		var constr = seep[json.type]
 	    	}
 	    	if(typeof constr == "undefined") {
-	    		console.log("Oops, something went wrong and the widget prototype for "+json.type+" is not defined")
+	    		console.log("Oops, something went wrong: the widget prototype for "+json.type+" is not defined")
 	    		return null
 	    	}
 	    	widget = new constr(json)
@@ -214,26 +224,46 @@ seep.application = function(appPath, elementId) {
 	}
 	
 	// FIXME create a buffer for these messages that queue up and are handled in the correct order in the server
+	var messageNumber = 0;
 	
-	this.sendEvent = function(widgetId, type, event) {
-		var message = {message: "event", id: widgetId}
+	this.sendEvent = function(widget, type, event, lazy) {
+		var message = {message: "event", id: widget.id}
+		
 		var send = ["altKey", "charCode", "clientX", "clientY", "ctrlKey", "data", "detail", "keyCode", "layerX", "layerY", "metaKey", "offsetX", "offsetY", "pageX", "pageY", "screenX", "screenY", "shiftKey", "wheelDelta", "which"]
 		var eventObj = {}
 		for(var i=0; i < send.length; i++)
 			eventObj[send[i]] = event[send[i]]
 		eventObj.type = type
 		message.event = eventObj
-		console.log("Sending event", message)
-		this.conn.send(message);
-	},
+		
+		// Send widget coordinates
+		var offset = $(widget.element).offset()
+		eventObj.pageX = offset.left
+		eventObj.pageY = offset.top
+		eventObj.offsetX = 0
+		eventObj.offsetY = 0
+		
+		this.messageQueue.push(message)
+		if(!lazy)
+			this.sendMessages()
+	}
 	
-	// Sync messages can be lazy, unless specially requested to be immediate
-	
+	// Sync messages are always lazy
 	this.sync = function(widgetId, prop, val) {
 		var message = {message: "sync", id: widgetId, prop: prop, val: val}
-		console.log("Synching", message)
-		this.conn.send(message)
+		this.messageQueue.push(message)
 	}
+	
+	this.sendMessages = function() {
+		console.log("Sending messages to server for app("+this.id+")", this.messageQueue)
+		this.conn.send({timestamp: new Date(), messages: this.messageQueue})
+		this.messageQueue = []
+	}
+	
+	// Send all pending messages when the page is unloaded
+	$(window).unload(function() {
+		self.sendMessages()
+	})
 	
 }
 
@@ -275,18 +305,20 @@ seep.widget = function(json) {
 				} else if(prop=="width") {
 					if(old != val) {
 						self.element.style.width = val
+						var prevSync = self.synching
 						self.sync(true)
 						self.pixelWidth = self.element.offsetWidth
 						self.sync("pixelWidth", "", self.element.offsetWidth)
-						self.sync(false)
+						self.sync(prevSync)
 					}
 				} else if(prop=="height") {
 					if(old != val) {
 						self.element.style.height = val
+						var prevSync = self.synching
 						self.sync(true)
 						self.pixelHeight = self.element.offsetHeight
 						self.sync("pixelHeight", "", self.element.offsetHeight)
-						self.sync(false)
+						self.sync(prevSync)
 					}
 				}
 				self.sync(prop, old, val)
@@ -303,9 +335,8 @@ seep.widget.prototype.sync = function() {
 		var prop = arguments[0]
 		var old = arguments[1]
 		var val = arguments[2]
-		var self = this
-		if(typeof old != "undefined" && old != val && this.synching)
-			self.application.sync(self.id, prop, val)
+		if(/*typeof old != "undefined" &&*/ old != val && this.synching)
+			this.application.sync(this.id, prop, val)
 	}
 }
 
@@ -343,7 +374,7 @@ seep.widget.prototype.update = function(json) {
     			else
     			    $(this.element).bind(type+".server", function(event) {
     			    	var w = seep.getWidget(this)
-    			    	w.application.sendEvent(w.id, type, event);
+    			    	w.application.sendEvent(w, type, event);
     				});
     		}
     	}
@@ -359,6 +390,12 @@ seep.widget.prototype.update = function(json) {
     				$(this.element).bind(type+".id"+id, function(event) {
     					var func = new Function(fn)
     					event.source = seep.getWidget(this)
+    					// Set widget coordinates
+						var offset = $(this).offset()
+						event.pageX = offset.left
+						event.pageY = offset.top
+						event.offsetX = 0
+						event.offsetY = 0
     					func.call(this, event)
     				});
     			}

@@ -1,9 +1,9 @@
 body {
 	font-family: "Droid Sans", sans-serif;
-	color: #2F2F30;
+	color: #2c3b42;
 	font-size: 14px;
 	line-height: 19px;
-	background: #E8EBED;
+	background: #949fa3;
 	}
 
 .test {
@@ -49,13 +49,9 @@ body {
 	margin: 0;
 	
 	background: #E8EAEA; /* old browsers */
-background: -moz-linear-gradient(top, #E8EAEA 6%, #d2d7d8 100%); /* firefox */
-
-background: -webkit-gradient(linear, left top, left bottom, color-stop(6%,#E8EAEA), color-stop(100%,#d2d7d8)); /* webkit */
-
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E8EAEA', endColorstr='#d2d7d8',GradientType=0 ); /* ie */
-
-background: -o-linear-gradient(top, #E8EAEA 6%,#d2d7d8 100%); /* opera */
+	background: -moz-linear-gradient(top, #E8EAEA 6%, #d2d7d8 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(6%,#E8EAEA), color-stop(100%,#d2d7d8)); /* webkit */
+	background: -o-linear-gradient(top, #E8EAEA 6%,#d2d7d8 100%); /* opera */
 	
 	border: 1px solid #AEB1B2;
 	cursor: pointer;
@@ -65,16 +61,11 @@ background: -o-linear-gradient(top, #E8EAEA 6%,#d2d7d8 100%); /* opera */
 	}
 
 .s-button.down {
-
 	background: #CCCECE; /* old browsers */
-background: -moz-linear-gradient(top, #CCCECE 6%, #C0C3C4 100%); /* firefox */
-
-background: -webkit-gradient(linear, left top, left bottom, color-stop(6%,#CCCECE), color-stop(100%,#C0C3C4)); /* webkit */
-
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CCCECE', endColorstr='#C0C3C4',GradientType=0 ); /* ie */
-
-background: -o-linear-gradient(top, #CCCECE 6%,#C0C3C4 100%); /* opera */
-
+	background: -moz-linear-gradient(top, #CCCECE 6%, #C0C3C4 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(6%,#CCCECE), color-stop(100%,#C0C3C4)); /* webkit */
+	background: -o-linear-gradient(top, #CCCECE 6%,#C0C3C4 100%); /* opera */
+	
 	border-color: #979899;
 	color: #272728;
 	text-shadow: 0 1px 0 rgba(255,255,255,.4);
@@ -124,4 +115,13 @@ background: -o-linear-gradient(top, #CCCECE 6%,#C0C3C4 100%); /* opera */
 
 .s-input.s-disabled {
 	color: #aaa;
+	}
+
+
+.s-overlay {
+	position: absolute;
+	min-width: 30px;
+	min-height: 30px;
+	background: #fff;
+	outline: 1px solid rgba(0,0,0,.3);
 	}
