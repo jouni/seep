@@ -133,13 +133,14 @@ seep.application = function(appPath, elementId) {
 	})
 	this.conn.on('disconnect', function() {
 		console.log("Application (id:" + self.id + ") disconnected")
+		$(self.getElement()).append('<div class="disconnected">App disconnected</div>')
 		// TODO server down? connection breaking?
 		// TODO need to clear the application from the DOM, make a full refresh
 		//this.connect()
 	})
 	
 	// Start the application
-	console.log("Starting application for path '" + appPath)
+	console.log("Starting application for path '" + appPath + "'")
 	this.conn.connect()
 	
 	this.update = function(json) {
@@ -153,7 +154,8 @@ seep.application = function(appPath, elementId) {
 		if(json.types) {
 			var load = []
 	    	for(var i=0; i < json.types.length; i++) {
-	    		load.push("widgets/" + json.types[i].replace(/\./g, "/") + ".js")
+	    		// TODO see where proper document root is
+	    		load.push("/widgets/" + json.types[i].replace(/\./g, "/") + ".js")
 	    	}
 	    	var self = this;
 	    	$LAB.setOptions({AlwaysPreserveOrder:true}).script(load).wait(function() {
@@ -161,6 +163,9 @@ seep.application = function(appPath, elementId) {
 	    	})
 		} else {
 			this.processWidgetChanges(json.widgets)
+		}
+		if(json.focused) {
+			this.getWidgetById(json.focused).focus()
 		}
 	}
 	    
@@ -215,6 +220,8 @@ seep.application = function(appPath, elementId) {
 	}
 	
 	this.unregister = function(id) {
+		$(this.applicationWidgets[id].element).unbind()
+		this.applicationWidgets[id].application = null
 		this.applicationWidgets[id] = null
 		delete this.applicationWidgets[id]
 	}
@@ -256,12 +263,12 @@ seep.application = function(appPath, elementId) {
 	
 	this.sendMessages = function() {
 		console.log("Sending messages to server for app("+this.id+")", this.messageQueue)
-		this.conn.send({timestamp: new Date(), messages: this.messageQueue})
+		this.conn.send({time: new Date().getTime(), messages: this.messageQueue})
 		this.messageQueue = []
 	}
 	
 	// Send all pending messages when the page is unloaded
-	$(window).unload(function() {
+	window.addEventListener("beforeunload", function() {	
 		self.sendMessages()
 	})
 	
@@ -369,13 +376,14 @@ seep.widget.prototype.update = function(json) {
     if(json.listeners) {
     	if(json.listeners.server) {
     		for(var type in json.listeners.server) {
-    			if(json.listeners.server[type] < 0)
-    			    $(this.element).unbind(type+".server")
-    			else
-    			    $(this.element).bind(type+".server", function(event) {
-    			    	var w = seep.getWidget(this)
-    			    	w.application.sendEvent(w, type, event);
-    				});
+    			if(json.listeners.server[type] < 0) {
+					$(this.element).unbind(type+".server")
+    			} else {
+					$(this.element).bind(type+".server", function(event) {
+						var w = seep.getWidget(this)
+						w.application.sendEvent(w, type, event)
+					})
+    			}
     		}
     	}
     	if(json.listeners.client) {

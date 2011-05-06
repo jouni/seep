@@ -1,0 +1,147 @@
+body {
+	font-family: "Droid Sans", sans-serif;
+	color: #2c3b42;
+	font-size: 14px;
+	line-height: 19px;
+	background: #E8EAEA;
+	}
+
+.test {
+	border: 1px solid rgba(0,0,0,.1);
+	padding: 12px 20px;
+	margin: 20px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	display: inline-block;
+	vertical-align: top;
+	-webkit-box-shadow: 0 1px 0 rgba(255,255,255,.5);
+	}
+
+.test > legend {
+	font-size: 12px;
+	font-weight: bold;
+	color: #5D6060;
+	text-shadow: 0 1px 0 rgba(255,255,255,.5)
+	}
+
+.test .row {
+	margin: 4px 0;
+	}
+
+
+.seep-app {
+	position: relative;
+	}
+
+.seep-app .disconnected {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: #444;
+	opacity: .8;
+	color: #fff;
+	text-align: middle;
+	padding: 1em;
+	font-weight: bold;
+	}
+
+
+.s-text {
+	display: inline-block;
+	zoom: 1;
+	}
+
+.s-button,
+.s-button.s-disabled:active {
+	-webkit-appearance: none;
+	font-family: "Droid Sans", sans-serif;
+	font-size: 13px;
+	line-height: 1;
+	font-weight: bold;
+	color: #2F2F30;
+	text-shadow: 0 1px 0 rgba(255,255,255,.7);
+	padding: 4px 16px;
+	border-radius: 3px;
+	margin: 0;
+	
+	background: #E8EAEA; /* old browsers */
+	background: -moz-linear-gradient(top, #E8EAEA 6%, #d2d7d8 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(6%,#E8EAEA), color-stop(100%,#d2d7d8)); /* webkit */
+	background: -o-linear-gradient(top, #E8EAEA 6%,#d2d7d8 100%); /* opera */
+	
+	border: 1px solid #AEB1B2;
+	cursor: pointer;
+	-webkit-box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 1px rgba(255,255,255,1);
+	-moz-box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 2px 0 rgba(255,255,255,.7), inset 0 0 1px rgba(255,255,255,1);
+	box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 2px 0 rgba(255,255,255,.7), inset 0 0 1px rgba(255,255,255,1);
+	}
+
+.s-button.down {
+	background: #CCCECE; /* old browsers */
+	background: -moz-linear-gradient(top, #CCCECE 6%, #C0C3C4 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(6%,#CCCECE), color-stop(100%,#C0C3C4)); /* webkit */
+	background: -o-linear-gradient(top, #CCCECE 6%,#C0C3C4 100%); /* opera */
+	
+	border-color: #979899;
+	color: #272728;
+	text-shadow: 0 1px 0 rgba(255,255,255,.4);
+	-webkit-box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 0 2px rgba(0,0,0,.3);
+	-moz-box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 0 2px rgba(0,0,0,.3);
+	box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 0 2px rgba(0,0,0,.3);
+}
+
+.s-button:focus,
+.s-input:focus {
+	outline: none;
+	-webkit-box-shadow: 0 0 3px #0060D6;
+	-moz-box-shadow: 0 0 3px #0060D6;
+	box-shadow: 0 0 3px #0060D6;
+	border-color: #4E95E0;
+	}
+
+.s-button::-moz-focus-inner {
+	border: 0;
+	}
+
+.s-button.s-disabled,
+.s-button.s-disabled:active {
+	opacity: .5;
+	cursor: default;
+	}
+
+
+
+.s-input {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: "Droid Sans", sans-serif;
+	font-size: 14px;
+	border: 1px solid rgba(0,0,0,.2);
+	border-top-color: rgba(0,0,0,.3);
+	color: #333;
+	padding: 3px;
+	margin: 0;
+	border-radius: 2px;
+	-webkit-box-shadow: 0 1px 0 rgba(255,255,255,.6);
+	-moz-box-shadow: 0 1px 0 rgba(255,255,255,.6);
+	box-shadow: 0 1px 0 rgba(255,255,255,.6);
+	}
+
+.s-input.s-disabled {
+	color: #aaa;
+	}
+
+
+.s-overlay {
+	position: absolute;
+	min-width: 30px;
+	min-height: 30px;
+	background: #fff;
+	outline: 1px solid rgba(0,0,0,.1);
+	-webkit-box-shadow: 0 2px 5px rgba(0,0,0,.4);
+	}

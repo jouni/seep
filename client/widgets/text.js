@@ -9,11 +9,11 @@ seep.text = function(json) {
 	
 	var self = this
 	this.watch("text", function(prop, old, val) {
-		if(this.type=="input")
-			this.element.value = val
+		if(this.type == "input" && !this._preventDomUpdate)
+			this.element.value = "" + val
 		else if(this.type=="checkbox")
 			this.label.innerHTML = val
-		else
+		else if(this.type != "input")
 			this.element.innerHTML = val
 		
 		self.sync(prop, old, val)
@@ -27,7 +27,7 @@ seep.text.inherit(seep.widget)
 seep.text.prototype.update = function(json) {
 	seep.widget.prototype.update.call(this, json)
 	this.sync(false)
-	if(json.text)
+	if(typeof json.text != "undefined")
 		this.text = json.text
 	this.sync(true)
 }

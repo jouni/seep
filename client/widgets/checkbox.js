@@ -45,3 +45,7 @@ seep.checkbox.prototype.update = function(json) {
 	}
 	this.sync(true)
 }
+
+seep.checkbox.prototype.focus = function(json) {
+	this.checkbox.focus()
+}

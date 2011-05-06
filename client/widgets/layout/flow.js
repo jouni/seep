@@ -37,18 +37,21 @@ seep.layout.flow.prototype.update = function(json) {
 			if(widget.parent != this) {
 				widget.parent = this
 				var el = widget.element;
+				if(el.parentNode)
+					el.parentNode.removeChild(el)
 				if(this.wrap) {
 					var wrap = this.wrap.split(".")
 					var el = document.createElement(wrap[0])
 					if(wrap.length >= 2)
 						el.className = wrap.splice(1,wrap.length-1).join(" ")
 					el.appendChild(widget.element)
-				} 
-				this.element.appendChild(el);
-				if(this.parent)
-	            	widget.attached()
-	            else
-	            	this.lazyAttach.push(widget)
+				}
+				if(i < json.widgets.length)
+					this.element.insertBefore(el, this.element.childNodes[i])
+				else
+					this.element.appendChild(el);
+				if(this.parent) widget.attached()
+	            else this.lazyAttach.push(widget)
 			}
 		}
 	}

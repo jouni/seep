@@ -12,16 +12,24 @@ seep.input = function(json) {
 	
 	var self = this
 	$(this.element).change(function(e) {
-		//self.sync(false)
+		self._preventDomUpdate = true
 		self.text = this.value
-		//self.sync(true)
-		//self.application.sync(self.id, "text", this.value)
+		self._preventDomUpdate = false
 	})
 	
 	$(this.element).keydown(function(e) {
-		if(self.text != this.value)
+		if(self.text != this.value) {
+			self._preventDomUpdate = true
 			self.text = this.value
+			self._preventDomUpdate = false
+		}
 	})
 }
 
 seep.input.inherit(seep.field)
+
+seep.input.prototype.update = function(json) {
+	seep.field.prototype.update.call(this, json)
+	if(json.placeholder)
+		this.element.placeholder = json.placeholder
+}

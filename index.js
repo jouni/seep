@@ -51,7 +51,7 @@ exports.registerApp = function(filename) {
  * Start the Seep server
  */
 exports.start = function(port, folder) {
-  connect.session.ignore.push('/', '/seep.js', '/LAB.js', '/socket.io/socket.io.js', '/widgets', '/jquery-1.4.2.min.js');
+  connect.session.ignore.push('/', '/seep.js', '/socket.io/socket.io.js', '/widgets', '/ender.min.js', 'LAB.js');
   var server = connect.createServer(
   		    connect.cookieParser()
   		    // FIXME specify session timeout and do proper cleanup when session ends

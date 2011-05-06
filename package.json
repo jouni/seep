@@ -5,6 +5,10 @@
 , "homepage" : "http://seepjs.org"
 , "version" : "0.0.1a"
 , "main" : "index"
+, "repository": {
+    "type": "git",
+    "url": "https://github.com/jounikoivuviita/Seep.git"
+  }
 , "dependencies" : {
 		  "connect" : "1.2.x"
 		, "socket.io" : "0.6.x"

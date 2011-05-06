@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Seep UI test</title>
-		<link rel="stylesheet" type="text/css" href="styles.css">
+		<link rel="stylesheet" type="text/css" href="/themes/alta.css">
 	</head>
 	<body>
 	
@@ -17,27 +17,24 @@
 	<fieldset class="test"><legend>Popup</legend><div id="popup"></div></fieldset>	
 	
 	
-	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-  		<script type="text/javascript">!window.jQuery && document.write("<script src=\"/jquery-1.4.2.min.js\"><\/script>");</script>
-  		<script src="/LAB.js" type="text/javascript"></script>
-		<script src="/socket.io/socket.io.js" type=text/javascript></script>
-		<script src="/seep.js" type="text/javascript"></script>
-		
-		<script type="text/javascript">
-			/* Arguments:
-			 *  - app path (the js filename for the application that is deployed on the server)
-			 *  - element id which will serve as the root of the application. Leave blank to occupy the body. Use 'true' to occupy an element with the same id as the path for the application
-		 	 */
-		 	seep.init("hello-world", true)
-		 	seep.init("visibility", true)
-		 	seep.init("disabled", true)
-		 	seep.init("change-text-with-button", true)
-		 	seep.init("add-remove-widgets", true)
-		 	seep.init("size", true)
-		 	seep.init("popup", true)
-		 	
-		</script>
+	<!-- TODO package all these dependencies to seep.js -->
+	<script src="/ender.min.js" type="text/javascript"></script>
+	<script src="/LAB.js" type="text/javascript"></script>
+	<script src="/socket.io/socket.io.js" type=text/javascript></script>
+	<script src="/seep.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		/* Arguments:
+		 *  - app path (the js filename for the application that is deployed on the server)
+		 *  - element id which will serve as the root of the application. Leave blank to occupy the body. Use 'true' to occupy an element with the same id as the path for the application
+		 */
+		seep.init("hello-world", true)
+		seep.init("visibility", true)
+		seep.init("disabled", true)
+		seep.init("change-text-with-button", true)
+		seep.init("add-remove-widgets", true)
+		seep.init("size", true)
+		seep.init("popup", true) 	
+	</script>
 	
 	</body>
 </html>

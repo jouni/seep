@@ -9,7 +9,8 @@ seep.field = function(json) {
 		if(self.type == "checkbox")
 			self.checkbox.disabled = val
 		self.element.disabled = val
-		$(self.element).toggleClass("s-disabled", val)
+		if(val) $(self.element).addClass("s-disabled")
+		else $(self.element).removeClass("s-disabled")
 		self.sync(prop, old, val)
 		return val
 	})
@@ -25,4 +26,8 @@ seep.field.prototype.update = function(json) {
 		this.disabled = json.disabled
 	}
 	this.sync(true)
+}
+
+seep.field.prototype.focus = function(json) {
+	this.element.focus()
 }
