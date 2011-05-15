@@ -16,6 +16,10 @@ seep.text = function(json) {
 		else if(this.type != "input")
 			this.element.innerHTML = val
 		
+		// Stringify any non-string values
+		if(val && typeof val != "string")
+			val = "" + val
+		
 		self.sync(prop, old, val)
 		return val
 	})

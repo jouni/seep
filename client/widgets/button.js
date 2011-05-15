@@ -12,6 +12,7 @@ seep.button = function(json) {
 			$(this).addClass("down")
 			this._clicking = true
     		event.preventDefault()
+    		event.stopPropagation()
     	}
     })
     

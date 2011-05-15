@@ -2,7 +2,11 @@ html,
 body {
 	padding: 0;
 	margin: 0;
-	height: 100%;
+	}
+
+.notepad {
+	margin: 40px 10%;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.4);
 	}
 
 .task,
@@ -12,6 +16,15 @@ body {
 	position: relative;
 	}
 
+.task {
+	border-bottom: 1px solid #E8E5BA;
+	background: #FFFDE8;
+	}
+
+.task:last-child {
+	border-bottom: none;
+	}
+
 .task .s-input,
 .add-task .s-input {
 	position: absolute;
@@ -19,14 +32,25 @@ body {
 	right: 64px;
 	}
 
-.task .s-text {
-	margin: 3px 168px 0 39px;
+.task .s-input {
+	border: none;
+	background: transparent;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	}
+
+.task.done .s-input {
+	text-decoration: line-through;
+	color: #888;
 	}
 
 .s-button.delete {
 	position: absolute;
-	right: 14px;
-	width: 42px;
+	right: 20px;
+	width: 30px;
+	padding-left: 0;
+	padding-right: 0;
 	}
 
 .s-checkbox.done {
@@ -39,12 +63,13 @@ body {
 	position: absolute;
 	right: 14px;
 	width: 42px;
+	font-size: 17px;
+	padding: 2px;
 	}
 
 .add-task {
 	padding-bottom: 3px;
 	border-bottom: 1px solid #ddd;
-	margin-bottom: 10px;
 	background: #fff;
 	}
 
@@ -53,6 +78,10 @@ body {
 	border: none;
 	}
 
-.task:hover {
+.add-task .s-input:focus {
+	-webkit-box-shadow: none;
+	}
+
+.task.hover {
 	background: #ddd;
 	}

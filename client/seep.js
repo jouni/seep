@@ -106,8 +106,6 @@ seep.application = function(appPath, elementId) {
 	this.path = appPath
 	
 	var self = this
-	
-	this.messageQueue = []
 
 	this.conn = new io.Socket()
 	
@@ -231,17 +229,18 @@ seep.application = function(appPath, elementId) {
 	}
 	
 	// FIXME create a buffer for these messages that queue up and are handled in the correct order in the server
-	var messageNumber = 0;
+	var messageNumber = 0
+	this.messageQueue = {sync: {}, events: []}
 	
 	this.sendEvent = function(widget, type, event, lazy) {
-		var message = {message: "event", id: widget.id}
-		
 		var send = ["altKey", "charCode", "clientX", "clientY", "ctrlKey", "data", "detail", "keyCode", "layerX", "layerY", "metaKey", "offsetX", "offsetY", "pageX", "pageY", "screenX", "screenY", "shiftKey", "wheelDelta", "which"]
 		var eventObj = {}
-		for(var i=0; i < send.length; i++)
-			eventObj[send[i]] = event[send[i]]
+		for(var i=0; i < send.length; i++) {
+			if(typeof event[send[i]] != "undefined")
+				eventObj[send[i]] = event[send[i]]
+		}
+		
 		eventObj.type = type
-		message.event = eventObj
 		
 		// Send widget coordinates
 		var offset = $(widget.element).offset()
@@ -250,21 +249,24 @@ seep.application = function(appPath, elementId) {
 		eventObj.offsetX = 0
 		eventObj.offsetY = 0
 		
-		this.messageQueue.push(message)
+		eventObj.id = widget.id
+		
+		this.messageQueue.events.push(eventObj)
 		if(!lazy)
 			this.sendMessages()
 	}
 	
 	// Sync messages are always lazy
 	this.sync = function(widgetId, prop, val) {
-		var message = {message: "sync", id: widgetId, prop: prop, val: val}
-		this.messageQueue.push(message)
+		if(!this.messageQueue.sync[""+widgetId])
+			this.messageQueue.sync[""+widgetId] = {}
+		this.messageQueue.sync[""+widgetId][prop] = val
 	}
 	
 	this.sendMessages = function() {
 		console.log("Sending messages to server for app("+this.id+")", this.messageQueue)
 		this.conn.send({time: new Date().getTime(), messages: this.messageQueue})
-		this.messageQueue = []
+		this.messageQueue = {sync: {}, events: []}
 	}
 	
 	// Send all pending messages when the page is unloaded
@@ -302,37 +304,41 @@ seep.widget = function(json) {
     this.element.className = "s-" + json.type.replace(/\./g, "-")
 	this.id = this.element.__seepId = json.id;
 	this.synching = true
+	this.syncProps = {}
+	this.visible = true
 	
-	if(json.sync) {
-		for(var i=0; i < json.sync.length; i++) {
-			var self = this
-			this.watch(json.sync[i], function(prop, old, val) {
-				if(prop=="visible") {
-					self.element.style.display = val ? "" : "none"
-				} else if(prop=="width") {
-					if(old != val) {
-						self.element.style.width = val
-						var prevSync = self.synching
-						self.sync(true)
-						self.pixelWidth = self.element.offsetWidth
-						self.sync("pixelWidth", "", self.element.offsetWidth)
-						self.sync(prevSync)
-					}
-				} else if(prop=="height") {
-					if(old != val) {
-						self.element.style.height = val
-						var prevSync = self.synching
-						self.sync(true)
-						self.pixelHeight = self.element.offsetHeight
-						self.sync("pixelHeight", "", self.element.offsetHeight)
-						self.sync(prevSync)
-					}
-				}
-				self.sync(prop, old, val)
-				return val
-			})
+	var self = this
+	this.watch("visible", function(prop, old, val) {
+		self.element.style.display = val ? "" : "none"
+		self.sync(prop, old, val)
+		return val
+	})
+	
+	this.watch("width", function(prop, old, val) {
+		if(old != val) {
+			self.element.style.width = val
+			var prevSync = self.synching
+	    	self.sync(true)
+	    	self.pixelWidth = self.element.offsetWidth
+	    	self.sync("pixelWidth", "", self.element.offsetWidth)
+	    	self.sync(prevSync)
+	    	self.sync(prop, old, val)
+	    }
+	    return val
+	})
+	
+	this.watch("height", function(prop, old, val) {
+		if(old != val) {
+			self.element.style.height = val
+			var prevSync = self.synching
+			self.sync(true)
+			self.pixelHeight = self.element.offsetHeight
+			self.sync("pixelHeight", "", self.element.offsetHeight)
+			self.sync(prevSync)
+	    	self.sync(prop, old, val)
 		}
-	}
+		return val
+	})
 }
 
 seep.widget.prototype.sync = function() {
@@ -342,13 +348,19 @@ seep.widget.prototype.sync = function() {
 		var prop = arguments[0]
 		var old = arguments[1]
 		var val = arguments[2]
-		if(/*typeof old != "undefined" &&*/ old != val && this.synching)
+		if((this.syncProps[prop] || prop=="pixelWidth" || prop=="pixelHeight") && old != val && this.synching) {
 			this.application.sync(this.id, prop, val)
+		}
 	}
 }
 
 seep.widget.prototype.update = function(json) {	
 	this.sync(false)
+	
+	if(json.sync) {
+		for(var prop in json.sync)
+			this.syncProps[prop] = true
+	}
 	
 	if(typeof json.visible != "undefined")
 		this.visible = json.visible
@@ -429,6 +441,14 @@ seep.widget.prototype.updateSize = function() {
 seep.widget.prototype.attached = function() {
 	this.updateSize()
 	$(this.element).trigger("attach")
+}
+
+seep.widget.prototype.addStyle = function(style) {
+	$(this.element).addClass(style)
+}
+
+seep.widget.prototype.removeStyle = function(style) {
+	$(this.element).removeClass(style)
 }
 
 seep.widget.prototype.watch = function (prop, handler) {

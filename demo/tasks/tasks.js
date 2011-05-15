@@ -1,13 +1,23 @@
 var seep = require("seep")
   , Task = require("./app/task").Task
+//  , TaskModel = require("./app/task").TaskModel
+//  , mongoose = require("mongoose")
 
 
 exports.app = seep.Application.extend({
 
 	init: function() {
 		this._super("Seep Tasks")
+		//mongoose.connect('mongodb://localhost/test');
+		//mongoose.model("Task", TaskModel)
+		//var TaskModel2 = mongoose.model("Task")
+		
+		//var testTask = new TaskModel2();
+		//testTask.title = "Test task"
+		//testTask.save()
 		
 		this.layout = new seep.layout.Flow()
+		this.layout.addStyle("notepad")
 		this.add(this.layout)
 		
 		this.newTask = new seep.Input()
@@ -24,6 +34,7 @@ exports.app = seep.Application.extend({
 		
 		this.newTask.addListener("keydown", function(e) {
 			if(e.keyCode==13) this.newButton.click()
+			else if(e.keyCode==27) this.newTask.text = ""
 		}, {bind: this, client: true})
 		
 		var newLayout = new seep.layout.Flow()
@@ -37,13 +48,15 @@ exports.app = seep.Application.extend({
 		
 		this.newTask.addListener("keydown", function(e) {
 			if(e.keyCode==40) {
-				var i = 1
-				var next = this.layout.getWidget(i)
-				while(next && next.isDone)
-					next = this.layout.getWidget(++i)
+				var next = this.layout.getWidget(1)
 				if(next) next.focus()
 			}
 		}, {bind: this})
+		
+		
+		newLayout.addListener("click", function() {
+			this.newTask.focus()
+		}, {bind: this, client: true})
 		
 	}
 	

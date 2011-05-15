@@ -32,6 +32,7 @@ seep.checkbox = function(json) {
 	
 	$(this.element).bind("mousedown", function(event) {
     	event.preventDefault()
+    	event.stopPropagation()
     })
 }
 

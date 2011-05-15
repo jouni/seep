@@ -1,0 +1,45 @@
+Testing
+====
+* Use Nodeunit for unit testing
+
+
+Widget ideas
+========
+
+Dockable panel (fixed position)
+* Dock to one side of the app, and contain any other widgets (inspiration: http://dribble.com/shots/158587-Zendesk-for-iPad/attachments/543)
+* Allows scrolling of content below the panel (should not cover scroll bars)
+* Auto-hide and reveal on hover (like OS X Dock)
+
+"Spaces"
+* Four sections for the app, no more (can maybe have less)
+* Switching of the space using arrow keys (+ some modifier)
+
+Dialogs
+* Enclose all floating elements inside a wrapper (see Twitter for reference): prevents body scrollbars from appearing if you drag a window out of view
+
+
+All widgets
+=======
+* Allow event screening for the server events, e.g. specify which keycodes should trigger a server event or which mouse button should trigger a click event to server
+
+
+
+
+Themes
+=====
+* Add a reset style (.seep-app * {margin: 0; padding: 0;} etc.)
+
+
+
+Breaking connections
+=============
+* Use HTML5 offline storage to save all modified field values and restore them after a successful reload
+
+
+
+
+Demo apps
+=======
+* Make the Tasks app look like a notepad with a binder and vertical lines for each row
+* Make a slideshow creation app: get photos from Flickr and from hard drive

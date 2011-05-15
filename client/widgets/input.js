@@ -33,3 +33,8 @@ seep.input.prototype.update = function(json) {
 	if(json.placeholder)
 		this.element.placeholder = json.placeholder
 }
+
+seep.input.prototype.focus = function(json) {
+	seep.field.prototype.focus.call(this, json)
+	this.element.select()
+}

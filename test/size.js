@@ -41,7 +41,7 @@ exports.app = seep.Application.extend({
 			this.width.text = this.change_me.pixelWidth + "px"
 			this.height.text = this.change_me.pixelHeight + "px"
 			this.change_me.text = this.change_me.pixelWidth + "px x " + this.change_me.pixelHeight + "px"
-		}, {bind: this})
+		}, {bind: this, client: true})
 		
 		var enterHandler = function(event) {
 			if(event.keyCode==13)

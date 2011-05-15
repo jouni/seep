@@ -19,9 +19,9 @@ exports.app = seep.Application.extend({
 			this.button.text = this.change_me.visible ? "Hide" : "Show"
 		}
 		
-		this.button.addListener("click", handler, {bind: this, id: "handler"})
+		this.button.addListener("click", handler, {bind: this, id: "handler", client: true})
 		
-		this.toggle = new seep.Checkbox("Clientside events")
+		this.toggle = new seep.Checkbox("Clientside events", true)
 		this.toggle.addListener("change", function(e) {
 			this.button.removeListener("handler")
 			if(e.source.checked) {

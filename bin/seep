@@ -10,4 +10,4 @@ else
 	fi
 fi
 
-node ${seep_dir}/../lib/start.js $run_dir $2
+node --debug ${seep_dir}/../lib/start.js $run_dir $2
