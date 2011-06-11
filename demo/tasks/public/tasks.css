@@ -1,12 +1,32 @@
 html,
 body {
-	padding: 0;
 	margin: 0;
+	padding: 30px 5%;
+	}
+
+body {
+	margin: 0;
+	padding: 30px 5%;
+	background: #fff url(blueprint-bg.jpg) repeat -1px -1px;
+	font-family: "Helvetica Neue", sans-serif;
+	font-size: 16px;
+	}
+
+.title {
+	position: absolute;
+	top: -10px;
+	left: 5%;
+	font-size: 24px;
+	color: #fff;
+	text-shadow: 0 1px 3px rgba(0,0,0,.4);
 	}
 
 .notepad {
-	margin: 40px 10%;
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.4);
+	-webkit-box-shadow: 0 1px 5px rgba(0,0,0,.4);
+	-moz-box-shadow: 0 1px 5px rgba(0,0,0,.4);
+	box-shadow: 0 1px 5px rgba(0,0,0,.4);
+	border-radius: 2px;
+	background: #FFFDE8;
 	}
 
 .task,
@@ -18,7 +38,7 @@ body {
 
 .task {
 	border-bottom: 1px solid #E8E5BA;
-	background: #FFFDE8;
+	padding: 6px 0;
 	}
 
 .task:last-child {
@@ -30,6 +50,9 @@ body {
 	position: absolute;
 	left: 34px;
 	right: 64px;
+	-webkit-appearance: none;
+	font-family: "Helvetica Neue", sans-serif;
+	font-size: 16px;
 	}
 
 .task .s-input {
@@ -42,7 +65,7 @@ body {
 
 .task.done .s-input {
 	text-decoration: line-through;
-	color: #888;
+	color: #D1C4A1;
 	}
 
 .s-button.delete {
@@ -51,6 +74,11 @@ body {
 	width: 30px;
 	padding-left: 0;
 	padding-right: 0;
+	visibility: hidden;
+	}
+
+.task:hover .s-button.delete {
+	visibility: visible;
 	}
 
 .s-checkbox.done {
@@ -63,14 +91,17 @@ body {
 	position: absolute;
 	right: 14px;
 	width: 42px;
-	font-size: 17px;
+	font-size: 18px;
 	padding: 2px;
 	}
 
 .add-task {
-	padding-bottom: 3px;
 	border-bottom: 1px solid #ddd;
 	background: #fff;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	position: relative;
+	z-index: 1;
 	}
 
 .add-task .s-input {

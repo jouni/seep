@@ -15,6 +15,22 @@ seep.field = function(json) {
 		return val
 	})
 	
+	this.watch("readOnly", function(prop, old, val) {
+		if(self.type == "checkbox")
+			self.checkbox.disabled = val
+		self.element.readOnly = val
+		self.sync(prop, old, val)
+		return val
+	})
+	
+	this.watch("tabIndex", function(prop, old, val) {
+		if(self.type == "checkbox")
+			self.checkbox.tabIndex = val
+		self.element.tabIndex = val
+		self.sync(prop, old, val)
+		return val
+	})
+	
 }
 
 seep.field.inherit(seep.text)
@@ -24,6 +40,12 @@ seep.field.prototype.update = function(json) {
 	this.sync(false)
 	if(typeof json.disabled != "undefined") {
 		this.disabled = json.disabled
+	}
+	if(typeof json.readOnly != "undefined") {
+		this.readOnly = json.readOnly
+	}
+	if(typeof json.tabIndex != "undefined") {
+		this.tabIndex = json.tabIndex
 	}
 	this.sync(true)
 }

@@ -12,9 +12,13 @@ seep.input = function(json) {
 	
 	var self = this
 	$(this.element).change(function(e) {
-		self._preventDomUpdate = true
+		if(self.__cancelEvent)
+			return true
+		//self._preventDomUpdate = true
 		self.text = this.value
-		self._preventDomUpdate = false
+		//self._preventDomUpdate = false
+		e.stopPropagation()
+		e.preventDefault()
 	})
 	
 	$(this.element).keydown(function(e) {

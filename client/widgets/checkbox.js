@@ -20,14 +20,15 @@ seep.checkbox = function(json) {
 		self.checkbox.checked = val
 		$(self.element).toggleClass("s-checked", val)
 		self.sync(prop, old, val)
+		if(this.synching)
+			$(self.element).trigger("change")
 		return val
 	})
 	
-	$(this.checkbox).change(function() {
-		self.sync("checked", !this.checked, this.checked)
-		self.sync(false)
+	$(this.checkbox).change(function(e) {
 		self.checked = this.checked
-		self.sync(true)
+		e.stopPropagation()
+		e.preventDefault()
 	})
 	
 	$(this.element).bind("mousedown", function(event) {

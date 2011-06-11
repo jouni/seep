@@ -21,6 +21,12 @@ seep.text = function(json) {
 			val = "" + val
 		
 		self.sync(prop, old, val)
+		
+		self.__cancelEvent = true
+		if(self.element.parentNode)
+			$(self.element).trigger("change")
+		delete self.__cancelEvent
+		
 		return val
 	})
 	

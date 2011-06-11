@@ -20,7 +20,7 @@ exports.app = seep.Application.extend({
 		this.remove = new seep.Button("Remove");
 		this.remove.addListener("click", function() {
 			if(this.layout.count() > 2)
-				this.layout.remove(this.layout.count()-1)
+				this.layout.remove(this.layout.count()-1, {animate: true})
 			if(this.layout.count()==2)
 				this.remove.disabled = true
 		}, {bind: this})

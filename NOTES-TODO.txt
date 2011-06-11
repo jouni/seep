@@ -18,6 +18,11 @@ Dockable panel (fixed position)
 Dialogs
 * Enclose all floating elements inside a wrapper (see Twitter for reference): prevents body scrollbars from appearing if you drag a window out of view
 
+Icons
+* Create a svg/canvas widget that can show different icons, and scale them dynamically
+* Here's a free library of good vector icons: http://raphaeljs.com/icons/
+
+
 
 All widgets
 =======

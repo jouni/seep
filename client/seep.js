@@ -148,6 +148,9 @@ seep.application = function(appPath, elementId) {
 			this.rootElement.__seepId = this.id
 			this.rootElement.innerHTML = ""
 		}
+		
+		if(this.rootElement == document.body && json.name)
+			document.title = json.name
 			
 		if(json.types) {
 			var load = []
@@ -301,7 +304,6 @@ seep.widget = function(json) {
 	this.parent = null
 	this.application = null
 	this.element = document.createElement(json.elementType? json.elementType : "div")
-    this.element.className = "s-" + json.type.replace(/\./g, "-")
 	this.id = this.element.__seepId = json.id;
 	this.synching = true
 	this.syncProps = {}
@@ -444,11 +446,15 @@ seep.widget.prototype.attached = function() {
 }
 
 seep.widget.prototype.addStyle = function(style) {
+	var oldStyles = ""+this.element.className
 	$(this.element).addClass(style)
+	this.sync("styles", oldStyles, this.element.className)
 }
 
 seep.widget.prototype.removeStyle = function(style) {
+	var oldStyles = ""+this.element.className
 	$(this.element).removeClass(style)
+	this.sync("styles", oldStyles, this.element.className)
 }
 
 seep.widget.prototype.watch = function (prop, handler) {

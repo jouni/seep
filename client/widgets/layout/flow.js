@@ -25,7 +25,13 @@ seep.layout.flow.prototype.update = function(json) {
 			if(widgetJson.remove) {	
 				var w = this.application.getWidgetById(widgetJson.id)
 				removed[w.id] = w
-				this.element.removeChild(this.wrap? w.element.parentNode: w.element)
+				var el = this.wrap? w.element.parentNode: w.element
+				if(widgetJson.anim) {
+					$(el).animate({"opacity": 0, duration: 130, after: function() {
+						el.parentNode.removeChild(el)
+					}})
+				} else
+					this.element.removeChild(el)
 				continue
 			}
 			
@@ -63,6 +69,15 @@ seep.layout.flow.prototype.update = function(json) {
 			    this.element.insertBefore(el, this.element.childNodes[widgetJson.i])
 			else
 			    this.element.appendChild(el)
+			
+			// Animate
+			if(widgetJson.anim) {
+				var h = $(el).css("height")
+				$(el).css({"margin-top": "-"+h, "opacity": 0})
+				$(el).animate({"margin-top": 0, duration: 200})
+				$(el).animate({"opacity": 1, duration: 500})
+			}
+			
 			    
 			if(this.parent) widget.attached()
 			else this.lazyAttach.push(widget)
