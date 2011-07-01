@@ -5,8 +5,7 @@ var seep = require("seep")
 
 exports.app = seep.Application.extend({
 
-	init: function() {
-		this._super("Seep Tasks")
+	start: function() {
 		
 		mongoose.connect('mongodb://localhost/test');
 		mongoose.model("Task", require("./app/task").TaskModel)

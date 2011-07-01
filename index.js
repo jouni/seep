@@ -19,9 +19,9 @@ exports.layout = require("./lib/widgets/layout") // All layout widgets
  * External dependencies
  ***********************************************************************/
 var connect = require("connect")
-  , io = require("socket.io")
-  , socketIO = require("socket.io-connect").socketIO
-  , MemoryStore = require('connect/lib/middleware/session/memory')
+  , socket_io = require("socket.io")
+  //, socketIO = require("socket.io-connect").socketIO
+  //, MemoryStore = require('connect/lib/middleware/session/memory')
   , path = require("path")
 
 
@@ -64,9 +64,7 @@ exports.start = function(port, folder) {
 	server.listen(port)
 	console.info("Seep server running at port " + port)
 	
-	var socket = io.listen(server)
+	var io = socket_io.listen(server)
 	
-	socket.on("connection", socket.prefixWithMiddleware(function (client, req, res) {
-		sessions.handleSocket(client, req, res)
-	}))
+	io.sockets.on("connection", sessions.handleSocket)
 }

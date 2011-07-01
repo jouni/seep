@@ -3,27 +3,22 @@ var seep = require("seep")
 exports.app = seep.Application.extend({
 
 	init: function() {
-		this._super("Popup")
+		this._super("Input Events")
 		
 		var layout = new seep.layout.Flow({wrap: "div.row"})
 		this.add(layout)
 		
-		this.button = new seep.Button("Open popup")
-		this.popup = new seep.Overlay()
-		this.popup.add(new seep.Text("Popup content"))
-		this.popup.visible = false
-		this.add(this.popup) // Overlays can only be added to the application, not to layouts
-				
+		this.change_me = new seep.Input("Text")
+		layout.add(this.change_me)
+		
+		this.button = new seep.Button("Button")
+		this.button.tooltip = "The state of the button should change depending on the content of the input area"
+		
 		var handler = function(e) {
-			this.popup.visible = !this.popup.visible
-			if(this.popup.visible) {
-				this.popup.top = (e.pageY + e.source.pixelHeight) + "px"
-				this.popup.left = e.pageX + "px"
-				this.popup.width = e.source.pixelWidth + "px"
-			}
+			this.button.disabled = !(this.change_me.text && this.change_me.text.length > 0)
 		}
 		
-		this.button.addListener("click", handler, {bind: this, id: "handler"})
+		this.change_me.addListener("keyup", handler, {bind: this, id: "handler"})
 		
 		this.toggle = new seep.Checkbox("Clientside events")
 		this.toggle.addListener("change", function(e) {

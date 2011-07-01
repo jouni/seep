@@ -107,16 +107,19 @@ seep.application = function(appPath, elementId) {
 	
 	var self = this
 
-	this.conn = new io.Socket()
+	this.conn = io.connect('http://localhost')
 	
-	this.conn.on('connect', function() {
-		console.log("Application connected ('"+appPath+"', "+this.transport.sessionid+"), requesting widgets...")
-		// A small delay is needed in order for the websocket to initialize before it can receive messages (noticed during testing and this seems to cure the problem robustly)
+	this.conn.on("connect", function() {
+		console.log("Application connected ('"+appPath+"'), requesting widgets...")
+		// A small delay is needed in order for the websocket to initialize 
+		// before it can receive messages (noticed during testing and this 
+		// seems to cure the problem robustly)
 		setTimeout(function() {
-			self.conn.send({message: settings.MESSAGE_INIT, path: appPath, sid: seep.readCookie("seep.sid") })
+			self.conn.emit(settings.MESSAGE_INIT, {path: appPath, sid: seep.readCookie("seep.sid") })
 		}, 10)
-	}) 
-	this.conn.on('message', function(data) {
+	})
+	
+	this.conn.on('update', function(data) {
 		if(data.sid) {
 			console.log("New sid", data.sid)
 			// TODO make the timeout configurable
@@ -126,9 +129,11 @@ seep.application = function(appPath, elementId) {
 		self.update(data)
 		console.log("App (id:" + self.id + ") updated", data)
 	})
+	
 	this.conn.on('close', function() {
 		console.log("Application (id:" + self.id + ") closed")
 	})
+	
 	this.conn.on('disconnect', function() {
 		console.log("Application (id:" + self.id + ") disconnected")
 		$(self.getElement()).append('<div class="disconnected">App disconnected</div>')
@@ -139,7 +144,7 @@ seep.application = function(appPath, elementId) {
 	
 	// Start the application
 	console.log("Starting application for path '" + appPath + "'")
-	this.conn.connect()
+	//this.conn.connect()
 	
 	this.update = function(json) {
 		this.id = json.id
@@ -160,17 +165,20 @@ seep.application = function(appPath, elementId) {
 	    	}
 	    	var self = this;
 	    	$LAB.setOptions({AlwaysPreserveOrder:true}).script(load).wait(function() {
-	    		self.processWidgetChanges(json.widgets)
+	    		self.processWidgetChanges(json.widgets, json.focused)
 	    	})
 		} else {
-			this.processWidgetChanges(json.widgets)
+			this.processWidgetChanges(json.widgets, json.focused)
 		}
-		if(json.focused) {
-			this.getWidgetById(json.focused).focus()
+		if(json.log) {
+			for(var i=0; i < json.log.length; i++) {
+				console.log(json.log[i])
+				//alert(json.log[i])
+			}
 		}
 	}
 	    
-	this.processWidgetChanges = function(widgets) {
+	this.processWidgetChanges = function(widgets, focused) {
 		if(!widgets)
 			return
 	    for(var i=0; i < widgets.length; i++) {
@@ -189,6 +197,8 @@ seep.application = function(appPath, elementId) {
 	        	console.log("No widget found for JSON", json)
 	        }
 	    }
+	    if(focused)
+	    	this.getWidgetById(focused).focus()
 	}
 	
 	this.getWidget = function(json) {
@@ -268,7 +278,7 @@ seep.application = function(appPath, elementId) {
 	
 	this.sendMessages = function() {
 		console.log("Sending messages to server for app("+this.id+")", this.messageQueue)
-		this.conn.send({time: new Date().getTime(), messages: this.messageQueue})
+		this.conn.emit("update", {time: new Date().getTime(), messages: this.messageQueue})
 		this.messageQueue = {sync: {}, events: []}
 	}
 	

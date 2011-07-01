@@ -46,6 +46,7 @@ body {
 	text-align: middle;
 	padding: 1em;
 	font-weight: bold;
+	z-index: 99999;
 	}
 
 
