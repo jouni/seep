@@ -1,17 +1,16 @@
 {
   "name" : "seep"
-, "description" : "High level widget & application framework for Node.js"
+, "description" : "High level widget & web application framework for Node.js"
 , "author" : "Jouni Koivuviita"
 , "homepage" : "http://seepjs.org"
 , "version" : "0.0.1a"
 , "main" : "index"
 , "repository": {
-    "type": "git",
-    "url": "https://github.com/jounikoivuviita/Seep.git"
+    "type": "git"
+  , "url": "https://github.com/jounikoivuviita/Seep.git"
   }
 , "dependencies" : {
-		  "connect" : "1.2.x"
-		, "socket.io" : "0.6.x"
-		, "socket.io-connect" : "0.2.x"
-	}
+    "connect" : "1.2.x"
+  , "socket.io" : "0.7.x"
+  }
 }
