@@ -42,7 +42,7 @@ var seep = (function(){
 			    new seep.application(appPath, appId);
 			}, 10)
 			
-			conn = io.connect('http://localhost/')
+			conn = io.connect(document.location)
 			conn.on(settings.MESSAGE_UPDATE, function(data) {
 				if(data.sid) {
 					console.log("New session id", data.sid)
@@ -129,7 +129,7 @@ seep.application = function(appPath, elementId) {
 	seep.openConnection(appPath)
 	
 	// Namespace the connection to this application
-	self.conn = io.connect('http://localhost/' + appPath)
+	self.conn = io.connect(document.location + appPath)
 		
 	self.conn.on("connect", function() {
 		console.log("Application connected ('"+appPath+"')")
