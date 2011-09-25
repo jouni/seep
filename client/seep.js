@@ -25,18 +25,36 @@ var seep = (function(){
 	}
 	
 	// Used for initializing the application and reconnecting after a socket disconnect
-	settings.MESSAGE_INIT = "init"
+	settings.MESSAGE_INIT = "seep_init"
+	settings.MESSAGE_UPDATE = "update"
 	
-	var applications = {};	
+	var applications = {}
+	
+	// Single socket for instantiating apps for namespaced connections
+	var conn = null
 	
 	// Public interface
 	return {
 		init: function(appPath, appId) {
-			if(typeof appId === "boolean")
+			if(typeof appId === "boolean" && appId)
 				appId = appPath
 	    	setTimeout(function() {
 			    new seep.application(appPath, appId);
-			}, 10);
+			}, 10)
+			
+			conn = io.connect('http://localhost/')
+			conn.on(settings.MESSAGE_UPDATE, function(data) {
+				if(data.sid) {
+					console.log("New session id", data.sid)
+					// TODO make the timeout configurable
+					seep.createCookie("seep.sid", data.sid, 1)
+				}
+			})
+		},
+		
+		openConnection: function(appPath) {
+			console.log("Starting connection for", appPath)
+			conn.emit(settings.MESSAGE_INIT, {path: appPath, sid: seep.readCookie("seep.sid") })
 		},
 		
 		getApplication: function(id) {
@@ -107,44 +125,29 @@ seep.application = function(appPath, elementId) {
 	
 	var self = this
 
-	this.conn = io.connect('http://localhost')
+	// Start the application (initialize the namespaced connection on the server)
+	seep.openConnection(appPath)
 	
-	this.conn.on("connect", function() {
-		console.log("Application connected ('"+appPath+"'), requesting widgets...")
-		// A small delay is needed in order for the websocket to initialize 
-		// before it can receive messages (noticed during testing and this 
-		// seems to cure the problem robustly)
-		setTimeout(function() {
-			self.conn.emit(settings.MESSAGE_INIT, {path: appPath, sid: seep.readCookie("seep.sid") })
-		}, 10)
+	// Namespace the connection to this application
+	self.conn = io.connect('http://localhost/' + appPath)
+		
+	self.conn.on("connect", function() {
+		console.log("Application connected ('"+appPath+"')")
 	})
 	
-	this.conn.on('update', function(data) {
-		if(data.sid) {
-			console.log("New sid", data.sid)
-			// TODO make the timeout configurable
-			seep.createCookie("seep.sid", data.sid, 1)
-		}
+	self.conn.on('update', function(data) {
 		// TODO keep the cookie alive if the application is used
 		self.update(data)
 		console.log("App (id:" + self.id + ") updated", data)
 	})
 	
-	this.conn.on('close', function() {
-		console.log("Application (id:" + self.id + ") closed")
-	})
-	
-	this.conn.on('disconnect', function() {
+	self.conn.on('disconnect', function() {
 		console.log("Application (id:" + self.id + ") disconnected")
-		$(self.getElement()).append('<div class="disconnected">App disconnected</div>')
+		$(self.getElement()).append('<div class="disconnected">App Disconnected</div>')
 		// TODO server down? connection breaking?
 		// TODO need to clear the application from the DOM, make a full refresh
 		//this.connect()
 	})
-	
-	// Start the application
-	console.log("Starting application for path '" + appPath + "'")
-	//this.conn.connect()
 	
 	this.update = function(json) {
 		this.id = json.id

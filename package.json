@@ -10,7 +10,7 @@
   , "url": "https://github.com/jounikoivuviita/Seep.git"
   }
 , "dependencies" : {
-    "connect" : "1.2.x"
+    "connect" : "1.7.x"
   , "socket.io" : "0.7.x"
   }
 }
