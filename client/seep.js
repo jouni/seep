@@ -52,9 +52,11 @@ var seep = (function(){
 			})
 		},
 		
-		openConnection: function(appPath) {
+		openConnection: function(appPath, app) {
 			console.log("Starting connection for", appPath)
-			conn.emit(settings.MESSAGE_INIT, {path: appPath, sid: seep.readCookie("seep.sid") })
+			conn.emit(settings.MESSAGE_INIT, {path: appPath, sid: seep.readCookie("seep.sid") }, function(sid) {
+				app.start(sid)
+			})
 		},
 		
 		getApplication: function(id) {
@@ -126,28 +128,30 @@ seep.application = function(appPath, elementId) {
 	var self = this
 
 	// Start the application (initialize the namespaced connection on the server)
-	seep.openConnection(appPath)
+	seep.openConnection(appPath, this)
 	
-	// Namespace the connection to this application
-	self.conn = io.connect(document.location + appPath)
+	this.start = function(sid) {
+		// Namespace the connection to this application
+		self.conn = io.connect(document.location + appPath + "_" + sid)
+			
+		self.conn.on("connect", function() {
+			console.log("Application connected ("+document.location + appPath + "_" + sid +")")
+		})
 		
-	self.conn.on("connect", function() {
-		console.log("Application connected ('"+appPath+"')")
-	})
-	
-	self.conn.on('update', function(data) {
-		// TODO keep the cookie alive if the application is used
-		self.update(data)
-		console.log("App (id:" + self.id + ") updated", data)
-	})
-	
-	self.conn.on('disconnect', function() {
-		console.log("Application (id:" + self.id + ") disconnected")
-		$(self.getElement()).append('<div class="disconnected">App Disconnected</div>')
-		// TODO server down? connection breaking?
-		// TODO need to clear the application from the DOM, make a full refresh
-		//this.connect()
-	})
+		self.conn.on('update', function(data) {
+			// TODO keep the cookie alive if the application is used
+			self.update(data)
+			console.log("App (id:" + self.id + ") updated", data)
+		})
+		
+		self.conn.on('disconnect', function() {
+			console.log("Application (id:" + self.id + ") disconnected")
+			$(self.getElement()).append('<div class="disconnected">App Disconnected</div>')
+			// TODO server down? connection breaking?
+			// TODO need to clear the application from the DOM, make a full refresh
+			//this.connect()
+		})
+	}
 	
 	this.update = function(json) {
 		this.id = json.id

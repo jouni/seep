@@ -67,19 +67,24 @@ exports.start = function(port, folder) {
 	server.listen(port)
 	console.info("Seep server running at port " + port)
 	
-	var io = socket_io.listen(server)
+	var io = socket_io.listen(server, {"log level": 1})
+	
+	/*io.configure(function () {
+	    io.set('transports', ['flashsocket', 'htmlfile', 'xhr-polling', 'jsonp-polling']);
+	});*/
 	
 	io.sockets.on("connection", function (socket) {
-		socket.on(settings.MESSAGE_INIT, function(data) {
+		socket.on(settings.MESSAGE_INIT, function(data, callback) {
 			if(!data.sid) {
 		        data.sid = socket.id
 		        socket.emit("update", {sid: socket.id})
 		    }
 		    var app = sessions.getApp(data.path, data.sid)
 		    if(app) {
-		    	io.of("/" + data.path).on("connection", function(socket) {
+		    	io.of("/" + data.path + "_" + data.sid).on("connection", function(socket) {
 		    		app.setConnection(socket)
 		    	})
+		    	callback(data.sid)
 	    	}
 	    	else
 	    		console.error("No application found for client/path", data.sid, data.path)
