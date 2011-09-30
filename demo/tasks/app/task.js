@@ -1,10 +1,10 @@
 var seep = require("seep")
-   , mongoose = require("mongoose")
+  , mongoose = require("mongoose")
 
 exports.TaskModel = new mongoose.Schema({
-    title        : String
+    title     : String
   , isDone    : Boolean
-  , finished   : Date
+  , finished  : Date
 })
 
 exports.Task = seep.layout.Flow.extend({
@@ -29,12 +29,16 @@ exports.Task = seep.layout.Flow.extend({
 				parent.getWidget(index).focus()
 		}, {bind: this})
 		
-		/*this.deleteBtn.addListener("mouseenter", function() {
+		this.deleteBtn.addListener("mouseover", function() {
 			this.addStyle("hover")
 		}, {bind: this, client: true})
-		this.deleteBtn.addListener("mouseleave", function() {
+		/*this.deleteBtn.addListener("mouseleave", function() {
 			this.removeStyle("hover")
 		}, {bind: this, client: true})*/
+		
+		this.addListener("mouseover", function() {
+			this.removeStyle("hover")
+		}, {bind: this, client: true})
 		
 		this.deleteBtn.tooltip = "Delete Task"
 		
