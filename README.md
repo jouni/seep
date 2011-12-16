@@ -20,8 +20,8 @@ my-app.js
   	  }
     
     })
-  
-    seep start my-app.js
+
+    $ seep start my-app.js
 
 ## License
 
