@@ -9,6 +9,8 @@ Seep provides user interface controls for your Node.js web applications. The UI 
 
 ## Hello World
 
+First create a new application file:
+
 my-app.js
 
     var seep = require("seep")
@@ -21,6 +23,7 @@ my-app.js
     
     })
 
+Then in the command line
 
     $ seep start my-app.js
 
