@@ -5,22 +5,22 @@ Seep provides user interface controls for your Node.js web applications. The UI 
 
 ## Installation
 
-npm install seep
+    npm install seep
 
 ## Hello World
 
 my-app.js
-  var seep = require("seep")
+    var seep = require("seep")
+    
+    var app = seep.Application.extend({
+    
+  	  start: function() {
+  		  this.add(new seep.Text("Hello World!"))
+  	  }
+    
+    })
   
-  var app = seep.Application.extend({
-  
-  	start: function() {
-  		this.add(new seep.Text("Hello World!"))
-  	}
-  
-  })
-
-  seep start my-app.js
+    seep start my-app.js
 
 ## License
 
