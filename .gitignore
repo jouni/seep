@@ -1,4 +1,3 @@
+.DS_Store
 
-Seep.esproj/user.jouni.espressostorage
-
-Seep.esproj/Project.espressostorage
+node_modules

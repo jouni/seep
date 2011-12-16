@@ -1,5 +1,5 @@
 body {
-	font-family: "Droid Sans", sans-serif;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 	color: #2c3b42;
 	font-size: 14px;
 	line-height: 19px;
@@ -32,6 +32,13 @@ body {
 
 .seep-app {
 	position: relative;
+	}
+
+body.seep-app {
+	margin: 0;
+	padding: 20px;
+	min-height: 100%;
+	position: static;
 	}
 
 .seep-app .disconnected {
@@ -80,6 +87,15 @@ body {
 	box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 2px 0 rgba(255,255,255,.7), inset 0 0 1px rgba(255,255,255,1);
 	}
 
+.s-button:focus,
+.s-input:focus {
+	outline: none;
+	-webkit-box-shadow: 0 0 3px #0060D6;
+	-moz-box-shadow: 0 0 3px #0060D6;
+	box-shadow: 0 0 3px #0060D6;
+	border-color: #4E95E0;
+	}
+
 .s-button.down {
 	background: #CCCECE; /* old browsers */
 	background: -moz-linear-gradient(top, #CCCECE 6%, #C0C3C4 100%); /* firefox */
@@ -93,15 +109,6 @@ body {
 	-moz-box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 0 2px rgba(0,0,0,.3);
 	box-shadow: 0 1px 0 rgba(255,255,255,.6), inset 0 0 2px rgba(0,0,0,.3);
 }
-
-.s-button:focus,
-.s-input:focus {
-	outline: none;
-	-webkit-box-shadow: 0 0 3px #0060D6;
-	-moz-box-shadow: 0 0 3px #0060D6;
-	box-shadow: 0 0 3px #0060D6;
-	border-color: #4E95E0;
-	}
 
 .s-button::-moz-focus-inner {
 	border: 0;

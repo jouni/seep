@@ -1,11 +1,10 @@
-seep.button = function(json) {
+var button = function(json, test) {
 	if(!json)
 		return
-	
 	if(!json.elementType)
 		json.elementType = "button"
 	
-	seep.field.call(this, json)
+	seep.layout.flow.call(this, json)
 	
 	$(this.element).bind("mousedown", function(event) {
 		if(event.which == 1) {
@@ -27,22 +26,40 @@ seep.button = function(json) {
 		$(this).removeClass("down")
     })
     
+    var self = $(this)
     var downHandler = function(event) {
-    	var self = $(this)
-    	self.addClass("down");
+    	self.addClass("down")
     	setTimeout(function() {self.removeClass("down")}, 120)
     }
     
     $(this.element).bind("down", downHandler)
     $(this.element).bind("keypress", function(event) {
-    	if(event.keyCode==13)
-    		downHandler.call(this, event)
+    	if(event.keyCode==13) {
+    		event.preventDefault()
+    		event.stopPropagation()
+    	}
+    })
+    $(this.element).bind("keydown", function(event) {
+    	if(event.keyCode==13) {
+    		$(this).addClass("down")
+    		event.preventDefault()
+    		event.stopPropagation()
+    	}
+    })
+    $(this.element).bind("keyup", function(event) {
+    	if(event.keyCode==13) {
+    		$(this).removeClass("down")
+			$(this).trigger("click")
+    		event.preventDefault()
+    		event.stopPropagation()
+    	}
     })
 }
 
-seep.button.inherit(seep.field)
+button.inherit(seep.layout.flow)
+seep.button = seep.field.make(button)
 
-seep.button.prototype.click = function() {
+button.prototype.click = function() {
 	$(this.element).trigger("down")
 	$(this.element).trigger("click")
 }

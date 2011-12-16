@@ -21,6 +21,9 @@ exports.layout = require("./lib/widgets/layout") // All layout widgets
 var connect = require("connect")
   , socket_io = require("socket.io")
   , path = require("path")
+  , fs = require("fs")
+  , log4js = require("log4js")
+  , logger = log4js.getLogger("Seep")
 
 
 
@@ -42,7 +45,10 @@ var sessions = require("./lib/sessions")
  * return true on success, false on fail
  */
 exports.registerApp = function(filename) {
-	return sessions.appRegistry.registerApp(filename);
+	return sessions.appRegistry.registerApp(filename)
+}
+exports.availableApps = function() {
+	return sessions.appRegistry.availableApps()
 }
 
 
@@ -54,24 +60,50 @@ exports.registerApp = function(filename) {
  * returns null
  */
 exports.start = function(port, folder) {
-  connect.session.ignore.push('/', '/seep.js', '/socket.io/socket.io.js', '/widgets', '/ender.min.js', 'LAB.js');
-  var server = connect.createServer(
+
+	
+
+	// Don't let the browser to cache these files
+	// TODO different settings for production
+	connect.session.ignore.push('/', '/seep.js', '/socket.io/socket.io.js', '/widgets', '/ender.min.js', 'LAB.js');
+	
+	// Create the server
+	var server = connect.createServer(
   		    connect.cookieParser()
   		    // FIXME specify session timeout and do proper cleanup when session ends
 	  	  , connect.session({ secret: "TODO-generate-key" })
 	  	  , connect.favicon()
 	  	  , connect.static(__dirname + "/client")
-	  	  , connect.static(folder + "public")
+	  	  , connect.static(folder + "/public")
+	  	  
+	  	  // Custom handling for direct application URL's
+		  , connect.router(function(app){
+				app.get('/*', function(req, res, next){
+					var path = req.url.substr(1)
+					if(sessions.appRegistry.availableApps().indexOf(path) > -1) {
+						fs.readFile(__dirname + "/client/default.html", "utf-8", function(err, file) {
+							if(err) {
+								logger.error(err)
+								next()
+								return
+							}
+							// TODO if not in root context, set the server_addr
+							res.end(file.replace("APP_URL", path).replace("SERVER_ADDR", "/"))
+						})
+					} else {
+						next()
+					}
+				})
+			})
 	  )
 	
+	
+	// Start listening requests
 	server.listen(port)
-	console.info("Seep server running at port " + port)
 	
-	var io = socket_io.listen(server, {"log level": 1})
-	
-	/*io.configure(function () {
-	    io.set('transports', ['flashsocket', 'htmlfile', 'xhr-polling', 'jsonp-polling']);
-	});*/
+	// Derive Socket.io log level from the log4js level
+	var logLevel = Math.ceil(4 - (logger.level.level/10000))
+	var io = socket_io.listen(server, {"log level": logLevel})
 	
 	io.sockets.on("connection", function (socket) {
 		socket.on(settings.MESSAGE_INIT, function(data, callback) {
@@ -81,13 +113,16 @@ exports.start = function(port, folder) {
 		    }
 		    var app = sessions.getApp(data.path, data.sid)
 		    if(app) {
-		    	io.of("/" + data.path + "_" + data.sid).on("connection", function(socket) {
-		    		app.setConnection(socket)
-		    	})
+		    	// Only initiate the connection once
+		    	if(!app.connection) {
+		    		io.of("/" + data.path + "_" + data.sid).on("connection", function(socket) {
+		    			app.setConnection(socket)
+			    	})
+			    }
 		    	callback(data.sid)
 	    	}
 	    	else
-	    		console.error("No application found for client/path", data.sid, data.path)
+	    		logger.error("No application found for client/path", data.sid, data.path)
 		})
 	})
 	

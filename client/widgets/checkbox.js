@@ -5,7 +5,7 @@ seep.checkbox = function(json) {
 	if(!json.elementType)
 		json.elementType = "label"
 	
-	seep.field.call(this, json)
+	seep.text.call(this, json)
 	
 	this.checkbox = document.createElement("input")
 	this.checkbox.type = "checkbox"
@@ -37,10 +37,10 @@ seep.checkbox = function(json) {
     })
 }
 
-seep.checkbox.inherit(seep.field)
+seep.checkbox.inherit(seep.text)
 
 seep.checkbox.prototype.update = function(json) {
-	seep.field.prototype.update.call(this, json);
+	seep.text.prototype.update.call(this, json);
 	this.sync(false)
 	if(typeof json.checked != "undefined") {
 		this.checked = json.checked
@@ -51,3 +51,5 @@ seep.checkbox.prototype.update = function(json) {
 seep.checkbox.prototype.focus = function(json) {
 	this.checkbox.focus()
 }
+
+seep.checkbox = seep.field.make(seep.checkbox)

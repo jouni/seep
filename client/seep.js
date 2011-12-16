@@ -42,7 +42,8 @@ var seep = (function(){
 			    new seep.application(appPath, appId);
 			}, 10)
 			
-			conn = io.connect(document.location)
+			seep.serverAddr = seep.standalone!=undefined? document.location.origin + seep.standalone : document.location
+			conn = io.connect(seep.serverAddr)
 			conn.on(settings.MESSAGE_UPDATE, function(data) {
 				if(data.sid) {
 					console.log("New session id", data.sid)
@@ -123,6 +124,7 @@ seep.application = function(appPath, elementId) {
 	
 	this.rootElement = elementId? document.getElementById(elementId) : document.body
 	this.rootElement.className += (this.rootElement.className.length>0? " " : "") + "seep-app"
+	!elementId? document.documentElement.style.minHeight = "100%" : null
 	this.path = appPath
 	
 	var self = this
@@ -132,10 +134,10 @@ seep.application = function(appPath, elementId) {
 	
 	this.start = function(sid) {
 		// Namespace the connection to this application
-		self.conn = io.connect(document.location + appPath + "_" + sid)
+		self.conn = io.connect(seep.serverAddr + appPath + "_" + sid)
 			
 		self.conn.on("connect", function() {
-			console.log("Application connected ("+document.location + appPath + "_" + sid +")")
+			console.log("Application connected ("+seep.serverAddr + appPath + "_" + sid +")")
 		})
 		
 		self.conn.on('update', function(data) {
@@ -358,6 +360,12 @@ seep.widget = function(json) {
 		}
 		return val
 	})
+    
+    if(json.focusable) {
+    	this.focus = function() {
+			self.element.focus()
+    	}
+    }
 }
 
 seep.widget.prototype.sync = function() {

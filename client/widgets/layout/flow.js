@@ -22,7 +22,7 @@ seep.layout.flow.prototype.update = function(json) {
 		for(var i=0; i < json.widgets.length; i++) {
 			var widgetJson = json.widgets[i]
 			
-			if(widgetJson.remove) {	
+			if(widgetJson.remove) {
 				var w = this.application.getWidgetById(widgetJson.id)
 				removed[w.id] = w
 				var el = this.wrap? w.element.parentNode: w.element
@@ -35,17 +35,24 @@ seep.layout.flow.prototype.update = function(json) {
 				continue
 			}
 			
-			// No changes for this slot
-			if(!widgetJson.w)
-				continue
+			var widget = this.application.getWidgetById(widgetJson.w.id)
 			
-			// Widget moved to this slot
-			if(removed[widgetJson.w.id]) {
+			if(widget && !removed[widget.id]) {
+				// 'k' is the element index in this layout
+				var k=0, e = this.wrap? widget.element.parentNode : widget.element
+				while (e = e.previousSibling) { ++k;}
+				if(k == widgetJson.i) {
+					// Widget is already in the same location
+					widget.update(widgetJson.w)
+					continue
+				}
+			} else if(removed[widgetJson.w.id]) {
+				// Widget was moved to this slot
 				var widget = removed[widgetJson.w.id]
 				removed[widgetJson.w.id] = null
 				delete removed[widgetJson.w.id]
 			} else {
-				// New widget	
+				// Totally new widget for this layout
 				var widget = this.application.getWidget(widgetJson.w);
 				if(!widget)
 					continue

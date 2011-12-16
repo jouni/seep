@@ -7,17 +7,19 @@
     , "url"  : "http://jounikoivuviita.com"
   }
 , "homepage" : "http://seepjs.org"
-, "version" : "0.0.1a"
+, "version" : "0.0.2a"
 , "main" : "./index"
 , "repository": {
     "type": "git"
   , "url": "https://github.com/jounikoivuviita/Seep.git"
   }
 , "dependencies" : {
-    "connect" : "1.7.x"
-  , "socket.io" : "0.7.x"
+    "connect" : ">1.7.x"
+  , "socket.io" : ">0.7.x"
+  , "log4js"    : ">0.4.x"
+  , "commander" : "0.5.0"
   }
 , "bin" : {
-	"seep" : "./bin/seep"
+	"seep" : "./lib/start.js"
   }
 }

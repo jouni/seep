@@ -1,11 +1,11 @@
-seep.input = function(json) {
+var input = function(json) {
 	if(!json)
 		return
 	
 	if(!json.elementType)
 		json.elementType = json.multiline? "textarea" : "input"
 	
-	seep.field.call(this, json)
+	seep.text.call(this, json)
 	
 	if(!json.multiline)
 		this.element.type = "text"
@@ -14,31 +14,36 @@ seep.input = function(json) {
 	$(this.element).change(function(e) {
 		if(self.__cancelEvent)
 			return true
-		//self._preventDomUpdate = true
+		self._preventDomUpdate = true
 		self.text = this.value
-		//self._preventDomUpdate = false
+		self._preventDomUpdate = false
 		e.stopPropagation()
 		e.preventDefault()
 	})
 	
-	$(this.element).keydown(function(e) {
+	function keyHandler(e) {
 		if(self.text != this.value) {
 			self._preventDomUpdate = true
 			self.text = this.value
 			self._preventDomUpdate = false
 		}
-	})
+	}
+	
+	$(this.element).keyup(keyHandler)
+	$(this.element).keydown(keyHandler)
 }
 
-seep.input.inherit(seep.field)
+input.inherit(seep.text)
 
-seep.input.prototype.update = function(json) {
-	seep.field.prototype.update.call(this, json)
+input.prototype.update = function(json) {
+	seep.text.prototype.update.call(this, json)
 	if(json.placeholder)
 		this.element.placeholder = json.placeholder
 }
 
-seep.input.prototype.focus = function(json) {
-	seep.field.prototype.focus.call(this, json)
+input.prototype.focus = function(json) {
+	seep.widget.prototype.focus.call(this, json)
 	this.element.select()
 }
+
+seep.input = seep.field.make(input)
