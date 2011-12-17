@@ -3,8 +3,14 @@
 
 Seep provides user interface controls for your Node.js web applications. The UI logic runs in the server, but you can expose parts of it by "seeping" some of the logic to the client (browser) as well.
 
+***Note: purely experimental at this point, not recommended for anything serious***
+
 ## Installation
 
+1. Install node.js (<http://nodejs.org>)
+2. Install npm
+    curl http://npmjs.org/install.sh | sh
+3. Install seep
     npm install seep
 
 ## Hello World
