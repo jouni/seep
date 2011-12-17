@@ -412,39 +412,47 @@ seep.widget.prototype.update = function(json) {
     	}
     }
     
+    function createServerListener(type) {
+    	return function(event) {
+    		var w = seep.getWidget(this)
+			w.application.sendEvent(w, type, event)
+    	}
+    }
+    
+    function createClientListener(type, fn) {
+    	return function(event) {
+    	    var func = new Function(fn)
+    	    event.source = seep.getWidget(this)
+    	    // Set widget coordinates
+		    var offset = $(this).offset()
+		    event.pageX = offset.left
+		    event.pageY = offset.top
+		    event.offsetX = 0
+		    event.offsetY = 0
+    	    func.call(this, event)
+    	}
+    }
+    
     if(json.listeners) {
     	if(json.listeners.server) {
     		for(var type in json.listeners.server) {
     			if(json.listeners.server[type] < 0) {
 					$(this.element).unbind(type+".server")
     			} else {
-					$(this.element).bind(type+".server", function(event) {
-						var w = seep.getWidget(this)
-						w.application.sendEvent(w, type, event)
-					})
+					$(this.element).bind(type+".server", createServerListener(type))
     			}
     		}
     	}
     	if(json.listeners.client) {
     		for(var i=0; i <  json.listeners.client.length; i++) {
     			var listenerObj = json.listeners.client[i]
-    			var type = listenerObj.t
-    			var id = listenerObj.id
+    			var type = listenerObj.t+""
+    			var id = listenerObj.id+""
     			if(listenerObj.remove) {
     				$(this.element).unbind(type+".id"+id)
     			} else {
     				var fn = "" + listenerObj.l
-    				$(this.element).bind(type+".id"+id, function(event) {
-    					var func = new Function(fn)
-    					event.source = seep.getWidget(this)
-    					// Set widget coordinates
-						var offset = $(this).offset()
-						event.pageX = offset.left
-						event.pageY = offset.top
-						event.offsetX = 0
-						event.offsetY = 0
-    					func.call(this, event)
-    				});
+    				$(this.element).bind(type+".id"+id, createClientListener(type, fn))
     			}
     		}
     	}

@@ -49,5 +49,9 @@ seep.field.make = function(targetClass) {
 		this.sync(true)
 	}
 	
+	field.prototype.focus = function() {
+		this.element.focus()
+	}
+	
 	return field
 }

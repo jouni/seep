@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+var fs = require("fs")
+  , path = require("path")
+  , exec = require('child_process').exec
+
+
+// Get the sources
+
+var ender = fs.readFileSync("../client/ender.js")
+ender = ender.toString("utf8", 0, ender.length)
+var lab = fs.readFileSync("../client/LAB.js", "utf8")
+var io = fs.readFileSync("../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js", "utf8")
+var seep = fs.readFileSync("../client/seep.js", "utf8")
+
+
+// Combine them into a temporary file
+
+var dir = path.dirname(__filename)
+fs.writeFileSync(dir + "/temp.js", ender + "\n;\n" + lab + "\n;\n" + io + "\n;\n" + seep)
+
+
+// Use uglifyjs to process the output
+var reserved = "seep.get"
+
+var child = exec("uglifyjs --no-copyright --reserved-names \""+reserved+"\" -o "+dir+"/../client/seep.min.js " + dir + "/temp.js",
+  function (error, stdout, stderr) {
+    if (error !== null) {
+      console.log('exec error: ' + error)
+    }
+    fs.unlinkSync(dir + "/temp.js")
+})

@@ -41,9 +41,10 @@ input.prototype.update = function(json) {
 		this.element.placeholder = json.placeholder
 }
 
-input.prototype.focus = function(json) {
-	seep.widget.prototype.focus.call(this, json)
+seep.input = seep.field.make(input)
+
+// Override so we can select the text
+seep.input.prototype.focus = function() {
+	this.element.focus()
 	this.element.select()
 }
-
-seep.input = seep.field.make(input)

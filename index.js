@@ -65,7 +65,7 @@ exports.start = function(port, folder) {
 
 	// Don't let the browser to cache these files
 	// TODO different settings for production
-	connect.session.ignore.push('/', '/seep.js', '/socket.io/socket.io.js', '/widgets', '/ender.min.js', 'LAB.js');
+	connect.session.ignore.push('/', '/seep.min.js', '/seep.js', '/socket.io/socket.io.js', '/widgets', '/ender.min.js', 'LAB.js');
 	
 	// Create the server
 	var server = connect.createServer(

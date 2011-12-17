@@ -33,13 +33,15 @@ my-app.js
     
     })
 
-Then in the command line, if you installed seep globally (with npm install -g seep)
+In the command line, if you installed seep globally (with npm install -g seep)
 
     $ seep start my-app.js
     
-For local install
+or for a local installation
     
     $ node_modules/.bin/seep start my-app.js
+    
+Then point your browser to http://localhost:8000/my-app
     
 
 
