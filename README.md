@@ -25,7 +25,7 @@ my-app.js
 
     var seep = require("seep")
     
-    var app = seep.Application.extend({
+    exports.app = seep.Application.extend({
     
   	  start: function() {
   		  this.add(new seep.Text("Hello World!"))
