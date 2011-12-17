@@ -9,8 +9,10 @@ Seep provides user interface controls for your Node.js web applications. The UI 
 
 1. Install node.js (<http://nodejs.org>)
 2. Install npm
+
     curl http://npmjs.org/install.sh | sh
 3. Install seep
+
     npm install seep
 
 ## Hello World
