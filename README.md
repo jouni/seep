@@ -33,9 +33,14 @@ my-app.js
     
     })
 
-Then in the command line
+Then in the command line, if you installed seep globally (with npm install -g seep)
 
     $ seep start my-app.js
+    
+For local install
+    
+    $ node_modules/.bin/seep start my-app.js
+    
 
 
 ## License
