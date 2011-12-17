@@ -142,8 +142,8 @@ seep.application = function(appPath, elementId) {
 		
 		self.conn.on('update', function(data) {
 			// TODO keep the cookie alive if the application is used
+			console.log("Update for app '"+self.path+"' (id:" + self.id + ")", data)
 			self.update(data)
-			console.log("App (id:" + self.id + ") updated", data)
 		})
 		
 		self.conn.on('disconnect', function() {
@@ -182,7 +182,6 @@ seep.application = function(appPath, elementId) {
 		if(json.log) {
 			for(var i=0; i < json.log.length; i++) {
 				console.log(json.log[i])
-				//alert(json.log[i])
 			}
 		}
 	}
