@@ -1,3 +1,5 @@
+![Seep](https://raw.github.com/jounikoivuviita/Seep/master/design/seep-logo.png)
+
 # Seep.js
 ### A web application UI library/framework for Node.js
 
